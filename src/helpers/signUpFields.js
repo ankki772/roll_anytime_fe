@@ -34,7 +34,8 @@ export const signUpFields = [
         type:'password',
         placeholder:'Password',
         label:'Password',
-        pattern:'(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+        pattern:'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$',
         errMsg:'contains atleast 8 characters,a number, uppercase and lowercase letter'
     }
 ]
+

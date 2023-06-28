@@ -3,12 +3,7 @@ import { Link } from 'react-router-dom'
 import { GlobalContext } from '../Contexts/globalContext'
 
 export default function Header() {
-  const myValues = useContext(GlobalContext)
-  console.log("-------------",myValues);
-  const [visible,setVisible] = useState(false)
-  const handleOutsideClick =()=>{
-    setVisible(!visible);
-  }
+  
   return (
     <>
 <header className="header">
@@ -25,7 +20,7 @@ export default function Header() {
       <li><Link href="#">Connect</Link></li>
     </ul>
   </nav>
-  <div className='outClick' onClick={handleOutsideClick}></div>
+ 
 </header>
 
 
@@ -45,7 +40,7 @@ export default function Header() {
         top: 0;
         width: 100%;
         box-shadow: 0 4px 20px hsla(207, 24%, 35%, 0.1);
-        background-color: #151418;
+        background-color: #2874f0;
         z-index: 1;
       }
       
@@ -135,7 +130,7 @@ export default function Header() {
           cursor: pointer;
         }
         .outClick{      
-          display:${!visible ? 'block' :'none'};
+          
           position:fixed;      
           width:100%;
           height:100vh;

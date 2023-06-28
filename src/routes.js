@@ -1,6 +1,7 @@
 import Layout from "./Components/Layout/layout";
 import Signup from "./Pages/signup";
 import Productdetail from "./Pages/productdetail";
+import Categories from "./Pages/categories";
 import Home from "./Pages/home";
 import SignIn from "./Pages/signin";
 import Profile from "./Pages/profile";
@@ -19,7 +20,11 @@ export const routes = [
         element:<Profile/>
       },
       {
-        path:"/:product_id",
+        path:"categories/:category_name",
+        element:<Categories/>
+      },
+      {
+        path:"product/:product_id",
         element:<Productdetail/>
       }
     ],

@@ -141,7 +141,7 @@ export default function Footer() {
         .copyright {
           text-align: center;
           color: #fff;
-          background-color: #6faaff;
+          background-color: black;
           padding: 0.6rem 0;
         }
 

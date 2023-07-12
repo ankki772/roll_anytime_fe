@@ -5,7 +5,7 @@ import FeaturedCategory from '../Components/Carousels/featuredCategory'
 export default function Home() {
   return (
     <>
-      <PopularItems/>
+      {/* <PopularItems/> */}
       <FeaturedCategory/>
       {/* <FeaturedItems/> */}
     {/* <div style={{height:"800px"}}>Home Page</div> */}

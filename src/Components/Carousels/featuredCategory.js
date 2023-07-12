@@ -85,7 +85,7 @@ export default function featuredItems() {
     slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 1000,
+    autoplaySpeed: 2000,
     nextArrow: (
       <div>
         <div className="next-slick-arrow">
@@ -127,13 +127,15 @@ export default function featuredItems() {
 			breakpoint: 768,
 			settings: {
 				arrows: false,
-				dots:false,
-				infinite: true,
+				dots:true,
+				infinite: false,
 				slidesToShow:1.5,
 				slidesToScroll:1,
 				autoplay: true,
-				autoplaySpeed:3000,
-        initialSlide:0
+				speed:1000,
+        autoplaySpeed:7000,
+        gap:10
+        
 			}
 		}]
   };
@@ -146,7 +148,7 @@ export default function featuredItems() {
             {Images.map((item) => (
               <Link to={"/"}>
                 <div key={item.id} className="img_wrap">
-                  <img src={item.src} alt={item.alt} className="img" />
+                  <img src={item.src} alt={item.alt} className="img" loading="lazy"/>
                   <h2 className="title">{item.title}</h2>
                   {/* <p className="description">{item.description}</p> */}
                 </div>
@@ -212,10 +214,7 @@ export default function featuredItems() {
         .car-container .slick-prev {
           left: -52px !important;
         }
-        .car-container .slick-next:before,
-        .car-container .slick-prev:before {
-          content: "" !important;
-        }
+        
         .next-slick-arrow,
         .prev-slick-arrow {
           color: #000000;
@@ -230,15 +229,34 @@ export default function featuredItems() {
           background-color: #ccc;
         }
         @media screen and (max-width: 768px) {
-          .car-container{
+          .car-container {
+            margin: 0 auto;
+            width: 90%;
+            border-color: white;
 
+            height:260px;
+            overflow:hidden;
           }
-          .car-container .slick-slide{
-            width:210px !important;
+          
+                 
+          .img_wrap{
+            position:relative;
+            width:210px
           }
-          .car-container .slick-slider .slick-track{
-
-            transform: translate3d(-212px, 0px, 0px);
+          .img {
+            display: flex;
+            margin: 0 5px;
+            height: 250px;
+            width: 100%;
+          }
+          .car-container .slick-list{
+            height:260px;
+          }
+          .car-container .slick-list .slick-track{
+              height:260px;           
+          }
+          .car-container .slick-dots{
+            bottom:-5px;
           }
         }
       `}</style>

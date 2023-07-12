@@ -11,7 +11,7 @@ export default function Header() {
     <input type="checkbox" id="menu-toggle"/>
     <label for="menu-toggle" className="menu-icon">&#9776;</label>
     <div className="logo">
-      <a href="index.html">Humayun.<span>K</span></a>
+      <a href="index.html">Roll Anytime<span></span></a>
     </div>
     <ul className="menu">
       <li><Link to="/">Home</Link></li>
@@ -40,7 +40,7 @@ export default function Header() {
         top: 0;
         width: 100%;
         box-shadow: 0 4px 20px hsla(207, 24%, 35%, 0.1);
-        background-color: #2874f0;
+        background-color: #ecf0f1;
         z-index: 1;
       }
       
@@ -54,7 +54,7 @@ export default function Header() {
       .logo a {
         font-size: 24px;
         font-weight: bold;
-        color: #fff;
+        color: black;
       }
       
       .logo a span {
@@ -73,7 +73,7 @@ export default function Header() {
         font-size: 17px;
         font-weight: 500;
         transition: 0.2s all ease-in-out;
-        color: #fff;
+        color: #1e272e;
       }
       
       .menu:hover a {
@@ -101,7 +101,7 @@ export default function Header() {
         .menu {
          
           flex-direction: column;
-          background-color: #151418;
+          background-color: #ecf0f1;
           align-items: start;
           position: absolute;
           top: 70px;
@@ -125,7 +125,7 @@ export default function Header() {
       
         .menu-icon {
           display: block;
-          color: #fff;
+          color: black;
           font-size: 28px;
           cursor: pointer;
         }

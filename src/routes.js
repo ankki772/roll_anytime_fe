@@ -5,7 +5,9 @@ import Categories from "./Pages/categories";
 import Home from "./Pages/home";
 import SignIn from "./Pages/signin";
 import Profile from "./Pages/profile";
-
+import ProductListing from "./Pages/productListing";
+import  MproductListing from "./Pages/mproductListing";
+import { isMobile,isTablet } from "react-device-detect";
 export const routes = [
   {
     path: "/",
@@ -26,6 +28,10 @@ export const routes = [
       {
         path:"product/:product_id",
         element:<Productdetail/>
+      },
+      {
+        path:"listing",
+        element: (isMobile && !isTablet)?  <MproductListing/> : <ProductListing/>
       }
     ],
   },

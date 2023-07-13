@@ -41,7 +41,7 @@ export default function Header() {
         width: 100%;
         box-shadow: 0 4px 20px hsla(207, 24%, 35%, 0.1);
         background-color: #2874f0;
-        z-index: 1;
+        z-index: 4;
       }
       
       nav {

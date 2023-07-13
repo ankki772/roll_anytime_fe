@@ -132,12 +132,16 @@ img{
 }
 .img-showcase img{
     min-width: 100%;
+    border-radius:30px;
 }
 .img-select{
     display: flex;
 }
 .img-item{
     margin: 0.3rem;
+}
+.img-item img{
+  border-radius:10px;  
 }
 .img-item:nth-child(1),
 .img-item:nth-child(2),
@@ -283,12 +287,16 @@ img{
     border-color: transparent;
     color: #fff;
 }
+.card{
+  padding:10px;
+}
 
 @media screen and (min-width: 992px){
     .card{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-gap: 1.5rem;
+        padding:10px;
     }
     .card-wrapper{
         height: 100vh;

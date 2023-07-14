@@ -11,7 +11,7 @@ export default function Layout() {
         <GlobalContext.Provider value={{users,setUsers}}>
           <Header />
           <Outlet />
-          <Footer />
+        <Footer />
         </GlobalContext.Provider>
       </div>
       <style jsx="true">

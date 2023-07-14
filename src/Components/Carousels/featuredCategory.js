@@ -127,11 +127,11 @@ export default function featuredItems() {
 			breakpoint: 768,
 			settings: {
 				arrows: false,
-				dots:true,
+				dots:false,
 				infinite: false,
 				slidesToShow:1.5,
 				slidesToScroll:1,
-				autoplay: true,
+				autoplay: false,
 				speed:1000,
         autoplaySpeed:7000,
         gap:10
@@ -142,7 +142,7 @@ export default function featuredItems() {
   return (
     <>
       <div className="content">
-        <h1 className="header1">Car Gallery</h1>
+        <h2 className="header1">Featured Category</h2>
         <div className="car-container">
           <Slider {...settings}>
             {Images.map((item) => (
@@ -159,13 +159,16 @@ export default function featuredItems() {
       </div>
 
       <style jsx>{`
-        h2 {
+      .img_wrap{
+        width:95%
+      }
+       .img_wrap h2 {
           font-size: 20px;
           font-family: sans-serif;
           display: flex;
           justify-content: center;
         }
-        h3 {
+       .img_wrap h3 {
           font-size: 10px;
           background-color: blue;
           display: flex;
@@ -179,15 +182,23 @@ export default function featuredItems() {
         .content {
           text-align: center;
           margin-bottom: 30px;
+          padding:5px 0 20px 0;
+          background-color:#f6f6f6;
+          margin-top:30px
         }
         .header1 {
-          font-size: 42px;
-        }
+          font-size: 33px;
+          height: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 5px;
+      }
         .img {
           display: flex;
           margin: 0 auto;
           height: 250px;
-          width: 200px;
+          width: 100%;
         }
         .car-container {
           margin: 0 auto;
@@ -197,14 +208,7 @@ export default function featuredItems() {
         .car-container .img_wrap {
           position: relative;
         }
-        .car-container .title {
-          position: absolute;
-          top: 10px;
-          left: 20px;
-          font-size: 15px;
-          color: black;
-          font-weight: bold;
-        }
+        
         .description {
           margin: 20px auto;
           width: 80%;
@@ -241,13 +245,20 @@ export default function featuredItems() {
                  
           .img_wrap{
             position:relative;
-            width:210px
+            width:95%
+          }
+          .img_wrap .title{
+            border-left: 1px solid #d2c4c4;
+            border-right: 1px solid #d2c4c4
           }
           .img {
             display: flex;
-            margin: 0 5px;
+            border: 1px solid #d2c4c4;
+            border-radius: 5px;
             height: 250px;
             width: 100%;
+            border: 1px solid #d2c4c4;
+            border-radius: 5px;
           }
           .car-container .slick-list{
             height:260px;
@@ -259,6 +270,22 @@ export default function featuredItems() {
             bottom:-5px;
           }
         }
+        .img_wrap .title {
+          position: absolute;
+          font-size: 19px;
+          color: black;
+          font-weight: bold;
+          bottom: 0;
+          background-color: #295a57;
+          width: 100%;
+          opacity: 0.7;
+          height: 35px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: white;
+      }
+      
       `}</style>
     </>
   );

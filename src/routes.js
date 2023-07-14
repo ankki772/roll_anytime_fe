@@ -11,7 +11,7 @@ import { isMobile,isTablet } from "react-device-detect";
 export const routes = [
   {
     path: "/",
-    element: <Layout />,
+    element: <Layout/>,
     children: [
       {
         path: "",

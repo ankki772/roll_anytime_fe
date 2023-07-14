@@ -79,109 +79,223 @@ const Images = [
   
 
 export default function featuredItems() {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 1000,
-        nextArrow: (
+  return <>
+    <div className="featured_container">
+      <div className="featured_content">
+        <h2 className="f_heading">Featured Items</h2>
+        <h3 className="sub_heading">Explore the featured items with best rating and reviews</h3>
+        <div className="f_cards">
+          <div className="featured_card">
             <div>
-              <div className="next-slick-arrow"> ⫸ </div>
+            <img
+              alt="img"
+              className="featured_image"
+              src="https://images.unsplash.com/photo-1518306727298-4c17e1bf6942?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjl8fGNhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
+            />
+          </div>
+            <div className="img_desc">
+              <span>Mazda 3 sedan</span>
+              <span>Rs.199/day</span>
             </div>
-          ),
-        prevArrow: (
+          </div>
+          <div className="featured_card">
             <div>
-              <div className="prev-slick-arrow"> ⫷ </div>
+            <img
+              alt="img"
+              className="featured_image"
+              src="https://images.unsplash.com/photo-1609034227505-5876f6aa4e90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=464&q=80"
+            />
+          </div>
+            <div className="img_desc">
+              <span>Mazda 3 sedan</span>
+              <span>Rs.199/day</span>
             </div>
-          ),
-      };
-  return (
-    <>
- <div className="content">
-      <h1 className="header1">Car Gallery</h1>
-      <div className="container">
-        <Slider {...settings}>
-          {Images.map((item) => (
-            <div key={item.id}>
-              <img src={item.src} alt={item.alt} className="img" />
-              <h2 className="title">{item.title}</h2>
-              <p className="description">{item.description}</p>
+          </div>
+          <div className="featured_card">
+            <div>
+            <img
+              alt="img"
+              className="featured_image"
+              src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDN8fGNhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
+            />
+          </div>
+            <div className="img_desc">
+              <span>Mazda 3 sedan</span>
+              <span>Rs.199/day</span>
             </div>
-          ))}
-        </Slider>
+          </div>
+          
+        </div>
+        <a href="#" >
+        <div className="btn-container">          
+            <button>More</button>
+          </div>
+        </a>
       </div>
     </div>
+  <style jsx>{`
+         body {
+          font-family: "Assistant,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif";
+          -webkit-font-smoothing: antialiased;
+        }
+    .featured_container {
+      margin: 0;
+  width: 100%;
+  background-color: black;
+  padding: 10px 0 30px 0;
+    }
+    .featured_container .featured_content {
+      background-color: black;
+      flex-direction: column;
+      width: 63%;
+      margin: 10px auto;
+      position: relative;
+    }
+    .featured_content  .f_heading {
+      margin:10px 0 0 0;
 
-   <style jsx>{
-    `
-      h2 {
-        font-size: 20px;
-        font-family: sans-serif;
-        display: flex;
-        justify-content: center;
+      /* font-size: 18px; */
+      font-weight: bold;
+      color: white;
+      background-color: black;
+    }
+    .f_cards {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: space-between;
+    }
+   .featured_container .featured_card{
+      width: 32%;
+      object-fit: cover;
+      position: relative;
+      border: 1px solid #949d9f;
+      border-radius: 5px;
+   }
+   .featured_container .featured_card img{
+      width: 100%;
+      height: 230px;
+      border-radius:5px 5px 0 0
+   }
+   .featured_container .featured_card .img_desc{
+    height: 40px;
+    width:100%;
+    background-color: #282C35;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 ;
+    border-radius:0 0 5px 5px
+   
+
+   }
+   .featured_container .featured_card .img_desc span:first-child{
+      color: #ffff;
+      font-size: 15px;
+      font-weight: 500;
+      padding:10px 5px;
+   }
+   .featured_container .featured_card .img_desc span:nth-child(2){
+      font-size: 12px;
+      color: #ffff;
+      padding:12px  5px;
+   }
+   .featured_container .featured_card div:first-child{
+      object-fit: cover;
+      height: 230px;
+      width: 100%;
+   }
+   .sub_heading{
+      color:#f8f9f5;
+      font-size: 13px;
+      font-weight: normal;
+      margin: 0 0 5px 0;
+   }
+   .featured_content .btn-container{
+      position: absolute;
+      top: 10px;
+      right: 43px;
+      width: 100px;
+   }
+button{
+color: #ce5c0c;
+border-color: #ce5c0c;
+}
+.featured_content button{
+position: relative;
+height: 30px;
+width: 100px;
+margin: 0 40px;
+font-size: 20px;
+font-weight: 400;
+letter-spacing: 1px;
+border-radius: 5px;
+text-transform: uppercase;
+border: 1px solid #ce5c0c;
+outline: none;
+cursor: pointer;
+background: #0d0d0d;
+overflow: hidden;
+transition: 0.6s;
+}
+.featured_content button:before, button:after{
+position: absolute;
+content: '';
+left: 0;
+top: 0;
+height: 100%;
+filter: blur(30px);
+opacity: 0.4;
+transition: 0.6s;
+}
+.featured_content button:before{
+width: 60px;
+background: rgba(255,255,255,0.6);
+transform: translateX(-130px) skewX(-45deg);
+}
+.featured_content button:after{
+width: 30px;
+background: rgba(255,255,255,0.6);
+transform: translateX(-130px) skewX(-45deg);
+}
+.featured_content button:hover:before,
+.featured_content button:hover:after{
+opacity: 0.6;
+transform: translateX(320px) skewX(-45deg);
+}
+.featured_content button:hover{
+color: #f2f2f2;
+}
+.featured_content button:hover{
+background: #ce5c0c;
+}
+button{
+color: #ce5c0c;
+border-color: #ce5c0c;
+}
+   @media screen and (max-width: 768px){
+      .featured_container .featured_card{
+          width: 100%;
       }
-      h3 {
-        font-size: 10px;
-        background-color: blue;
-        display: flex;
-        justify-content: center;
-        border-radius: 5px;
-        padding: 150px 0;
-        margin: 0px auto;
-        font-family: sans-serif;
-        margin: 0 50px;
+      .f_cards{
+          gap:13px
       }
-      .content {
-        text-align: center;
-        margin-bottom: 30px;
+      .featured_container .featured_content{
+          width:75%;
+          position: relative;
       }
-      .header1 {
-        font-size: 42px;
+      .featured_content .btn-container{
+            position: absolute;
+            bottom: -35px !important;
+         
+            left: 15% !important;
+            top: auto;
+            
       }
-      .img {
-        display: flex;
-        margin: 0 auto;
-        height: 40vh;
-        width: 80%;
-        border-radius: 5%;
-      }
-      .container {
-        margin: 0 auto;
-        width: 100%;
-        height: 80vh;
-        border-color: white;
-      }
-      .title {
-        margin-left: 50px;
-        width: 70%;
-        font-size: 30px;
-        padding: 20px;
-        border-radius: 5px;
-        font-size: 33px;
-      }
-      .description {
-        margin: 20px auto;
-        width: 80%;
-        font-size: 25px;
-        margin: 20px auto;
-      }
-      .slick-prev {
-        left: -52px !important;
-      }
-      .slick-next:before,
-      .slick-prev:before {
-        content: "" !important;
-      }
-      .next-slick-arrow,
-      .prev-slick-arrow {
-        color: #000000;
-        font-size: 45px;
-      }   
-    `
-}</style>
-    </>
-  )
+   }
+   .featured_content a{
+  text-decoration: none;
+}
+  `}
+  </style>
+  </>
 }

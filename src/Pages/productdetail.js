@@ -6,7 +6,7 @@ export default function Productdetail() {
   return (
   <>
   <div class = "card-wrapper">
-  <div class = "card">
+  <div class = "product_card">
   
     <div class = "product-imgs">
       <div class = "img-display">
@@ -287,12 +287,12 @@ img{
     border-color: transparent;
     color: #fff;
 }
-.card{
+.product_card{
   padding:10px;
 }
 
 @media screen and (min-width: 992px){
-    .card{
+    .product_card{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-gap: 1.5rem;

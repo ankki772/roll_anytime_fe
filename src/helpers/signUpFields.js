@@ -3,7 +3,7 @@ export const signUpFields = [
         id:1,
         name:'username',
         type:'text',
-        placeholder:'Username',
+        // placeholder:'Username',
         label:'Username',
         pattern:'[A-Za-z]{1,32}',
         errMsg:"please enter username"
@@ -13,7 +13,7 @@ export const signUpFields = [
         id:2,
         name:'email',
         type:'email',
-        placeholder:'Email',
+        // placeholder:'Email',
         label:'Email',
         pattern:'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$',
         errMsg:'please enter valid email'
@@ -23,7 +23,7 @@ export const signUpFields = [
         id:3,
         name:'phone',
         type:'text',
-        placeholder:'Phone',
+        // placeholder:'Phone',
         label:'Phone',
         pattern:'[6789][0-9]{9}',
         errMsg:'please enter valid phone number'
@@ -32,7 +32,7 @@ export const signUpFields = [
         id:4,
         name:'password',
         type:'password',
-        placeholder:'Password',
+        // placeholder:'Password',
         label:'Password',
         pattern:'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$',
         errMsg:'contains atleast 8 characters,a number, uppercase and lowercase letter'

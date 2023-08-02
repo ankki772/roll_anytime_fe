@@ -1,20 +1,47 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { signInFiels } from "../helpers/signInFiels";
 import Input from "../Components/input";
-import { Link } from "react-router-dom";
+import { signInUser } from "../Api/Services/user";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../Contexts/userContext";
+import { setCookies } from "../helpers/cookiehelper";
 
 export default function SignIn() {
+  const nav = useNavigate()
+  const {setAuth} = useContext(UserContext);
   const [values, setValues] = useState({
-    emailPhone: "",
+    emailphone: "",
     password: "",
   });
+
+function validatePhoneNumber(input_str) {
+    var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+  
+    return re.test(input_str)
+  }
 
   const onChange = (e)=>{
       setValues({...values,[e.target.name]:e.target.value});
   }
   const onSubmit= async (e)=>{
+
+    let countryCode = "+91";
+    console.log("========",values)
+
+    if(validatePhoneNumber(values.emailphone)){
+      values.emailphone = `${countryCode}${values.emailphone}`
+    }
     e.preventDefault();
-    // let response = await SignIn(values);
+    let response = await signInUser(values);
+    if(response.data?.message?.token && response?.status == 200){
+      setCookies("token")
+      setAuth(true)
+      nav('/account')
+
+    }
+    else{
+      setAuth(false)
+    }
     
   }
   return (

@@ -4,33 +4,61 @@ export default function Input(props) {
   const [focused, setFocused] = useState(false);
   const {
     label = "",
+    labelTag = false,
     onChange = () => {},
     placeholder = "",
     pattern = "",
     type = "",
-    errMsg='',
-    name=''
+    errMsg = "",
+    name = "",
+    hidden = false,
+    svg = false,
+    id = "",
+    labelClass = "",
+    inputClass = "",
+    value = "",
+    defaultValue=""
+    
   } = props;
   const handleFocus = () => {
     setFocused(true);
   };
   return (
     <>
-      <input
-        type={type}
-        name={name}
-        onChange={onChange}
-        pattern={pattern}
-        required
-        onBlur={handleFocus}
-        focused={focused.toString()}
-      />
+      {labelTag ? <label className={labelClass ? labelClass : ""} htmlFor={id}>
+         {label}
+      </label>:<label className={labelClass ? labelClass : ""} htmlFor={id}>{svg}</label>}
+      {type == "file" ? (
+        <input
+          type={type}
+          name={name}
+          onChange={onChange}
+          pattern={pattern}
+          required
+          hidden={hidden}
+          id={id}
+        />
+      ) : (
+        <input
+          type={type}
+          name={name}
+          onChange={onChange}
+          required
+          onBlur={handleFocus}
+          focused={focused.toString()}
+          hidden={hidden}
+          id={id}
+          // value={value}
+          defaultValue={defaultValue}
+          placeholder={placeholder}
+          className={inputClass ? inputClass : ""}
+        />
+      )}
       <span></span>
-      <label>{label}</label>
+      {label && !labelTag ? <label>{label}</label> : null}
       <small>
-        <i>{errMsg || ''}</i>
+        <i>{errMsg || ""}</i>
       </small>
-
     </>
   );
 }

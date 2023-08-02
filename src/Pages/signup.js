@@ -3,6 +3,7 @@ import { signUpFields } from "../helpers/signUpFields";
 import Input from "../Components/input";
 import { signup } from "../Api/Services/user";
 import { Link } from "react-router-dom";
+import { formDataHelper } from "../helpers/formDataHelper";
 
 export default function SignUp() {
   const [values, setValues] = useState({
@@ -17,7 +18,8 @@ export default function SignUp() {
   }
   const onSubmit= async (e)=>{
     e.preventDefault();
-    // let response = await signup(values);
+    let response = await signup(formDataHelper(values),{authorization:false});
+    console.log("response=========",response)
     
   }
   return (

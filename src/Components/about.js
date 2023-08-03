@@ -1,5 +1,5 @@
 import React from 'react'
-import AboutImage from '../Assets/images/figma12 1.png'
+import AboutImage from '../assets/images/figma12 1.png'
 
 export default function About() {
   return (

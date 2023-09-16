@@ -22,7 +22,7 @@ export const routes = [
         element:<Profile/>
       },
       {
-        path:"categories/:category_name",
+        path:"categories/:category_name/",
         element:<Categories/>
       },
       {

@@ -31,16 +31,9 @@ export default function TopSlider() {
                                     </Link>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
-
-                 </div>
-
-
-              
-             
+                 </div>            
             ))}
           </Slider>
        </div>

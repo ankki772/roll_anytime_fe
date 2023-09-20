@@ -139,7 +139,7 @@ export default function featuredItems() {
           -webkit-font-smoothing: antialiased;
         }
     .featured_container {
-      margin: 0;
+      margin: 5px;
   width: 100%;
   background-color: black;
   padding: 10px 0 30px 0;

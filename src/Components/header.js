@@ -91,7 +91,7 @@ export default function Header() {
         position: sticky;
         top: 0;
         width: 100%;
-        box-shadow: 0 4px 20px hsla(207, 24%, 35%, 0.1);
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 6px -6px;
         background-color: #ecf0f1;
         z-index: 4;
       }

@@ -86,3 +86,24 @@ export const topSliderCategory = [
         img_url:"https://assets.myntassets.com/f_webp,w_980,c_limit,fl_progressive,dpr_2.0/assets/images/2022/7/28/0174e4d7-448c-4746-8572-69461ad5be101659020268081-Tops---Tees_Desk.jpg"
        }
 ]
+
+export const dummysubcatlist=[
+  {
+    img_url:"https://images.unsplash.com/photo-1507494924047-60b8ee826ca9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80",
+    sub_cat_name:"camera",
+    price:"10 k",
+    available: true   
+  },
+  {
+    img_url:"https://images.unsplash.com/photo-1507494924047-60b8ee826ca9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80",
+    sub_cat_name:"camera",
+    price:"10 k",
+    available: true   
+  },
+  {
+    img_url:"https://images.unsplash.com/photo-1507494924047-60b8ee826ca9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80",
+    sub_cat_name:"camera",
+    price:"10 k",
+    available: true   
+  }
+]

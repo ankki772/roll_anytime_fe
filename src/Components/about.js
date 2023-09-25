@@ -50,7 +50,7 @@ export default function About() {
     /* align-items: center; */
     justify-content: center;
   }
-  h2{
+  .second h2{
     font-family: Inter;
     font-size: 48px;
     font-weight: 700;

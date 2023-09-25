@@ -160,7 +160,7 @@ export default function featuredItems() {
         width:95%
       }
        .img_wrap h2 {
-          font-size: 20px;
+          font-size: 20px !important;
           font-family: sans-serif;
           display: flex;
           justify-content: center;

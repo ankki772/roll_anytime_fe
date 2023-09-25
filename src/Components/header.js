@@ -44,7 +44,7 @@ export default function Header() {
 
           <div className="action-container">
             <div className="actions">
-              <Link to='/' >
+              <Link to='/account' >
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

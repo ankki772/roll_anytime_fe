@@ -11,6 +11,7 @@ import Admin from "./Pages/admin";
 import ProtectedRoute from "./Utils/protectedRoute";
 import { ProductCart } from "./Components/productCart";
 import { isMobile,isTablet } from "react-device-detect";
+import Cart from "./Pages/cart";
 export const routes = [
   {
     path: "/",
@@ -32,6 +33,10 @@ export const routes = [
       {
         path:"product/:product_id",
         element:<Productdetail/>
+      },
+      {
+        path:"cart",
+        element:<Cart/>
       },
       {
         path:"listing",

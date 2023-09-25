@@ -14,7 +14,7 @@ export default function SUbcategoryList() {
         </div>
         <ul class="subcat-item-list">
           {dummysubcatlist.map((item, idx) => (
-            <Link to="/account">
+            <Link to="/account" className="catlist">
               <li class="subcat-item" key={`${idx}_scl`}>
                 <span>
                   <LazyLoadImage
@@ -29,6 +29,11 @@ export default function SUbcategoryList() {
               </li>
             </Link>
           ))}
+          <Link to='/'>
+            <li>
+              View all
+            </li>
+          </Link>
         </ul>
       </div>
       <style jsx>{`
@@ -74,6 +79,9 @@ export default function SUbcategoryList() {
           border-radius: 10px;
           border: 1px solid #fff;
           box-shadow: 0 2px 6px #0003;
+        }
+        .catlist span{
+          color:#000
         }
       `}</style>
     </>

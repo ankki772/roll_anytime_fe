@@ -134,7 +134,7 @@ export default function featuredItems() {
         <div className="car-container">
           <Slider {...settings}>
             {Images.map((item, idx) => (
-              <Link to={"/"}>
+              <Link to={"/product/kkk"}>
                 <div
                   key={item.id + "fc"}
                   className={`img_wrap ${idx === 0 ? "active_cat" : ""}`}

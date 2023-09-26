@@ -29,7 +29,7 @@ export default function SUbcategoryList() {
               </li>
             </Link>
           ))}
-          <Link to='/'>
+          <Link to='/listing/'>
             <li>
               View all
             </li>

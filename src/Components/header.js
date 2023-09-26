@@ -58,7 +58,7 @@ export default function Header() {
                 </svg>
               </span>
               </Link>
-              <Link to='/'>
+              <Link to='/cart'>
               <span className="cart">
                 <span className="badge">2</span>
                 <svg

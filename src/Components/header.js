@@ -4,12 +4,27 @@ import { GlobalContext } from "../Contexts/globalContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import roll_anytime from "../assets/roll_anytime.png";
 export default function Header() {
+  const [checkedMenu, setCheckedMenu] = useState(false)
+
+  let menus = [{url:'/',slug:"Home"},{url:'/account',slug:"Profile"},{url:"/",slug:"Contact-Us"},{url:"/",slug:"Connect"},{url:"/login",slug:"login"},{url:"/",slug:"logout"}]
+  const closeMenu = (e) =>{
+     let checkedMen = document.getElementById("menu-toggle").checked 
+     if(checkedMen ){
+        setCheckedMenu(false)
+        document.querySelector(".menu").style.transform = "scale(1, 0)"        
+      }
+      else{
+        setCheckedMenu(true)
+        document.querySelector(".menu").style.transform = "scale(1, 1)"       
+      }
+   
+  }
   return (
     <>
       <header className="header">
         <nav>
-          <div className="nav_left">
-            <input type="checkbox" id="menu-toggle" />
+          <div className="nav_left" onClick={(e)=>closeMenu(e)} >
+            <input type="checkbox" id="menu-toggle" checked={checkedMenu}/>
             <label for="menu-toggle" className="menu-icon">
               &#9776;
             </label>
@@ -26,10 +41,14 @@ export default function Header() {
                 <span></span>
               </a>
             </div>
-          <ul className="menu">
-            <li>
-              <Link to="/">Home</Link>
+          <ul className="menu" onClick={(e)=>closeMenu(e)}>{
+            menus.map((menuItem,id)=><>
+            <li >
+              <Link to={menuItem.url} >{menuItem.slug}</Link>
             </li>
+            </>)
+          }
+{/*             
             <li>
               <Link to="/account">Profile</Link>
             </li>
@@ -38,13 +57,13 @@ export default function Header() {
             </li>
             <li>
               <Link href="#">Connect</Link>
-            </li>
+            </li> */}
           </ul>
           </div>
 
           <div className="action-container">
             <div className="actions">
-              <Link to='/' >
+              <Link to='/account' >
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -151,8 +170,7 @@ export default function Header() {
       }
       
       @media only screen and (max-width: 950px) {
-        .menu {
-         
+        .menu {       
           flex-direction: column;
           background-color: #ecf0f1;
           align-items: start;
@@ -165,8 +183,6 @@ export default function Header() {
           transform-origin: top;
           transition: transform 0.3s ease-in-out;
           box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-          
-
         }
       
         .menu a {
@@ -183,8 +199,7 @@ export default function Header() {
           font-size: 28px;
           cursor: pointer;
         }
-        .outClick{      
-          
+        .outClick{                
           position:fixed;      
           width:100%;
           height:100vh;

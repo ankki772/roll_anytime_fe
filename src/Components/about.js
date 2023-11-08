@@ -1,5 +1,5 @@
 import React from 'react'
-import AboutImage from '../assets/roll_anytime.png'
+import AboutImage from '../Assets/roll_anytime.png'
 
 export default function About() {
   return (

@@ -2,6 +2,7 @@ import React from 'react'
 import { topSliderCategory } from '../../dummyprd';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import SliderCommon from '../common/slideImg';
 export default function TopSlider() {
     const settings = {
         dots: true,
@@ -18,24 +19,8 @@ export default function TopSlider() {
    <div className='myx-indexContainer'>
     <div className='myx-stretch'>
        <div className='carousel-base'>
-       <Slider {...settings}>
-            {topSliderCategory.map((item) => (
-             
-                 <div className='container-base myx-stretch'>
-                    <div style={{paddingBottom:"50px"}}>
-                        <div className='container-container container-aspectContainer'>
-                            <div className=' row-base'>
-                                <div className=' column-base'>
-                                    <Link to='/'>
-                                           <img className='image-image image-hand' src={item.img_url} alt=''/>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                 </div>            
-            ))}
-          </Slider>
+        <SliderCommon topSliderCategory={topSliderCategory} />
+      
        </div>
     </div>
    </div>

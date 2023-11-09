@@ -49,7 +49,7 @@ export const routes = [
     ],
   },
   {
-    path: "/signin",
+    path: "/login",
     element: <SignIn/>,
   },
   {

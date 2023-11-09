@@ -1,9 +1,9 @@
 
 import { client } from "../client"
 
-export const getPopularCategories = async  () =>{
+export const getPopularItems = async  () =>{
     try{
-        let response = await client.get('user/products');       
+        let response = await client.get('product/getpopularproduct');       
         return response ;
     }
     catch(err){

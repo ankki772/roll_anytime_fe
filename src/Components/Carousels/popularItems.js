@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import { getPopularCategories } from "../../Api/Services/products";
+import { getPopularItems } from "../../Api/Services/products";
 export default function PopularItems() {
   const [popularItems, setPopularItems] = useState([]);
 
@@ -8,7 +8,7 @@ export default function PopularItems() {
     getPCategories();
   }, []);
 async function getPCategories(){
-  const popItems = await getPopularCategories();
+  const popItems = await getPopularItems();
       console.log("ressssssssssssss", popItems);
       if (popItems?.data?.data) {
         setPopularItems([...popItems?.data?.data, ...popItems?.data?.data]);

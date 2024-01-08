@@ -11,7 +11,7 @@ const AddProduct = () => {
     product_code: "",
     pricing: "",
     rating: "",
-    productImg: "",
+    product_imges: "",
     quantity: "",
   });
 
@@ -47,7 +47,9 @@ const AddProduct = () => {
             "Content-Type": "multipart/form-data",
           },
         }
-      );
+      ).then((e)=>{
+        console.log("dddddddd",e)
+      })
   
       console.log("###", response.data);
     } catch (error) {
@@ -183,7 +185,7 @@ const AddProduct = () => {
                 margin="normal"
                 fullWidth
                 type="file"
-                name="productImg"
+                name="product_imges"
                 onChange={handleChange}
               />
             </Grid>

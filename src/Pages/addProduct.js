@@ -11,7 +11,7 @@ const AddProduct = () => {
     product_code: "",
     pricing: "",
     rating: "",
-    product_imges: "",
+    productImg: "",
     quantity: "",
   });
 
@@ -45,6 +45,7 @@ const AddProduct = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            "authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Yzc5NjljYzU0ZDNjZWExMWNhMTc4MyIsInVzZXJuYW1lIjoiZGl3ZWRpYXNoaXNoIiwiZW1haWxwaG9uZSI6ImFkaXdlZGkxMkBrbG91ZHJhYy5jb20iLCJpYXQiOjE3MDQ2OTc0NTYsImV4cCI6MTcwNDc4Mzg1Nn0.lciSHPkaueKw25pTIyWIG27mcxPUt1vtzdWiO0eGwKU",
           },
         }
       ).then((e)=>{
@@ -185,7 +186,7 @@ const AddProduct = () => {
                 margin="normal"
                 fullWidth
                 type="file"
-                name="product_imges"
+                name="productImg"
                 onChange={handleChange}
               />
             </Grid>

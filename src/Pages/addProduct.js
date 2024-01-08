@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+ 
+ 
 
 const AddProduct = () => {
+  
+  const navigate=useNavigate()
   const [addProduct, setAddProduct] = useState({
     product_name: "",
     product_category: "",
@@ -11,33 +16,32 @@ const AddProduct = () => {
     product_code: "",
     pricing: "",
     rating: "",
-    product_imges: "",
+    productImg: "",
     quantity: "",
   });
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     const file = type === "file" ? e.target.files[0] : null;
-  
+
     setAddProduct((prevProduct) => ({
       ...prevProduct,
       [name]: type === "file" ? file : value,
     }));
   };
-  
 
   const handleClick = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
-  
+
       // Append each field of addProduct to formData
       for (const key in addProduct) {
         formData.append(key, addProduct[key]);
       }
-  
+
       console.log("@@@", addProduct);
-  
+
       // Make sure to use formData instead of addProduct directly
       const response = await axios.post(
         "https://624d-2405-201-402e-a058-2d5c-edb1-b63f-a05b.ngrok-free.app/api/RA/product/addProduct",
@@ -45,18 +49,23 @@ const AddProduct = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            authorization:
+              "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Yzc5NjljYzU0ZDNjZWExMWNhMTc4MyIsInVzZXJuYW1lIjoiZGl3ZWRpYXNoaXNoIiwiZW1haWxwaG9uZSI6ImFkaXdlZGkxMkBrbG91ZHJhYy5jb20iLCJpYXQiOjE3MDQ2OTc0NTYsImV4cCI6MTcwNDc4Mzg1Nn0.lciSHPkaueKw25pTIyWIG27mcxPUt1vtzdWiO0eGwKU",
           },
         }
-      ).then((e)=>{
-        console.log("dddddddd",e)
-      })
-  
-      console.log("###", response.data);
+      );
+      // .then((e)=>{
+      //   console.log("dddddddd",e)
+      // })
+      console.log(response);
+      if (response.status === 200) {
+        alert(response.data.message.message);
+        // navigate('/account')
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  
 
   return (
     <>
@@ -181,11 +190,10 @@ const AddProduct = () => {
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_images"
                 margin="normal"
                 fullWidth
                 type="file"
-                name="product_imges"
+                name="productImg"
                 onChange={handleChange}
               />
             </Grid>
@@ -205,6 +213,6 @@ const AddProduct = () => {
       </Grid>
     </>
   );
-};
+};  
 
 export default AddProduct;

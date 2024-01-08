@@ -5,7 +5,6 @@ import { products } from "../dummyprd";
 import SortbyDrawer from "./sortbyDrawer";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import roll_anytime from '../Assets/roll_anytime.png'
 function Prdlist() {
   return (
     <>

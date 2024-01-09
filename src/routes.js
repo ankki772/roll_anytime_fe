@@ -6,6 +6,7 @@ import Home from "./Pages/home";
 import SignIn from "./Pages/signin";
 import Profile from "./Pages/profile";
 import ProductListing from "./Pages/productListing";
+import AddProduct from './Pages/addProduct'
 import  MproductListing from "./Pages/mproductListing";
 import Admin from "./Pages/admin";
 import ProtectedRoute from "./Utils/protectedRoute";
@@ -59,5 +60,9 @@ export const routes = [
   {
     path:"/admin",
     element:   <Admin/>
-  }
+  },
+  {
+    path: "/addProduct",
+    element: <AddProduct/>,
+  },
 ];

@@ -63,6 +63,6 @@ export const routes = [
   },
   {
     path: "/addProduct",
-    element: <AddProduct/>,
+    element: <ProtectedRoute><AddProduct/></ProtectedRoute>,
   },
 ];

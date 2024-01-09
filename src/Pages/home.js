@@ -33,6 +33,15 @@ export default function Home() {
           setPopulatItems([]);
         }
   }
+  async function getALlItemslist(){
+    const popItems = await getPopularItems();
+        console.log("ressssssssssssss", popItems);
+        if (popItems?.result) {
+          setPopulatItems(popItems?.result)
+        } else {
+          setPopulatItems([]);
+        }
+  }
 
   return (
     <>

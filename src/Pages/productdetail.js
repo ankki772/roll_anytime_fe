@@ -1,14 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import SliderCommon from '../Components/common/slideImg';
 import Slider from 'react-slick';
+import { getProductDetails } from '../Api/Services/products';
 export default function Productdetail() {
   const {product_id} = useParams();
   console.log("product id " , product_id)
+  const [productDetail, setProductDetail] = useState({})
   let products = ["https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg",
 "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg",
 "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg",
 "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg"]
+
+useEffect(() => {
+  ;(async()=>{
+    let result = await getProductDetails(product_id);
+    console.log("jabdkjbsa",result)
+    if (result?.result.length) {
+        setProductDetail(result?.result[0])
+    }
+  })()
+
+ 
+}, [])
+
   return (
   <>
   <div className = "card-wrapper">
@@ -16,24 +31,22 @@ export default function Productdetail() {
   
     <div className = "product-imgs">
       <div className = "img-display">
-        <SliderCommon topSliderCategory={products} detail/>
-       
+        <SliderCommon topSliderCategory={productDetail?.product_imges||[]} detail/>       
       </div>
      
     </div>
     
     <div className = "product-content">
-      <h2 className = "product-title">nike shoes</h2>
+      <h2 className = "product-title">{productDetail?.product_name}</h2>
     
 
       <div className = "product-price">
-        <p className = "new-price">Price: <span>Rs.249.00</span></p>
+        <p className = "new-price">Price: <span>Rs.{productDetail?.pricing}</span></p>
       </div>
 
       <div className = "product-detail">
-        <h2>about this item: </h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo eveniet veniam tempora fuga tenetur placeat sapiente architecto illum soluta consequuntur, aspernatur quidem at sequi ipsa!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, perferendis eius. Dignissimos, labore suscipit. Unde.</p>
+        <h2>About this item: </h2>
+        <p>{productDetail?.product_description}</p>
         <ul>
           <li>Color: <span>Black</span></li>
           <li>Available: <span>in stock</span></li>

@@ -7,7 +7,7 @@ import { UserContext } from "../Contexts/userContext";
 import { setCookies } from "../helpers/cookiehelper";
 
 export default function SignIn() {
-  const nav = useNavigate()
+  const navigate = useNavigate()
   const {setAuth} = useContext(UserContext);
   const [values, setValues] = useState({
     emailphone: "",
@@ -33,11 +33,11 @@ function validatePhoneNumber(input_str) {
     }
     e.preventDefault();
     let response = await signInUser(values);
-    if(response.data?.message?.token && response?.status == 200){
-      setCookies("token")
+    console.log("response from login",response,response?.status == 200)
+    if(response?.token){
       setAuth(true)
-      nav('/account')
-
+      console.log("naviagteion")
+      navigate('/');
     }
     else{
       setAuth(false)

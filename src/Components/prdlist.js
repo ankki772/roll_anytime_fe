@@ -1,13 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Searchfilter from "../Components/bottomstrip";
 import { products } from "../dummyprd";
 import SortbyDrawer from "./sortbyDrawer";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { getAllItems } from "../Api/Services/products";
 function Prdlist() {
+
+  const [productList, setProductList] = useState([])
+  useEffect(() => {
+    // getpopularItemslist();
+    ;(async()=>{
+      let result = await getAllItems();
+      console.log("sjbkjbaklka",result)
+      if (result?.result.length) {
+        setProductList(result?.result)
+      }
+
+    })()
+
+  
+    
+  }, [])
+  
   return (
     <>
+    {console.log("djvmsnkdvnlsdcls",productList)}
       {/* <Searchfilter /> */}
       {/* <SortbyDrawer/> */}
       {/* <ul className="list">
@@ -100,7 +119,44 @@ function Prdlist() {
         })}
       </ul> */}
       <section className="sc-hokXgN fKSTpe">
-        <div className="sc-bke1zw-0 fIuLDK">
+        {productList && productList.length ?
+        productList.map((product,id)=>{
+          return(
+            <>
+            <div className="sc-bke1zw-0 fIuLDK" key={product?._id}>
+          <div className="sc-bke1zw-1 hWGQVf">
+            <div>
+              <Link to={`/product/${product?.product_id}`}>
+                <section className="sc-hQfrgq jsPkKi">
+                  <div className="sc-s1isp7-1 gMhjmN sc-fxMfqs gYVtRh">
+                    <div className="sc-s1isp7-3 cVOEqG"></div>
+                    <img className="sc-s1isp7-5 fyZwWD" src={product?.product_imges[0]} />
+
+                  </div>
+                  <section className="sc-rzOft kLNdwA"></section>
+                </section>
+                <div className="sc-jklikK fomxOG">
+                  <h3 className="sc-fxmata sc-izfUZz kiIscI">{product?.product_name}</h3>
+                  <div className="sc-eqGige dKRZxZ">
+                    {product?.product_description}
+                  </div>
+                  <div className="sc-eqGige dKRZxZ">
+                  <span style={{color:'black'}}>Price : </span>   Rs. {product?.pricing} 
+                  </div>
+
+                </div>
+              </Link>
+            </div>
+
+          </div>
+
+        </div>
+            </>
+          )
+
+          
+        }):null}
+        {/* <div className="sc-bke1zw-0 fIuLDK">
           <div className="sc-bke1zw-1 hWGQVf">
             <div>
               <Link to='/product/:product_id'>
@@ -127,8 +183,8 @@ function Prdlist() {
 
           </div>
 
-        </div>
-        <div className="sc-bke1zw-0 fIuLDK">
+        </div> */}
+        {/* <div className="sc-bke1zw-0 fIuLDK">
           <div className="sc-bke1zw-1 hWGQVf">
             <div>
               <Link to='/product/:product_id'>
@@ -214,7 +270,7 @@ function Prdlist() {
 
           </div>
 
-        </div>
+        </div> */}
       </section>
 
       {/* <style jsx>{`

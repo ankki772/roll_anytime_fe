@@ -6,7 +6,7 @@ import roll_anytime from "../Assets/Images/roll_anytime.png";
 export default function Header() {
   const [checkedMenu, setCheckedMenu] = useState(false)
 
-  let menus = [{url:'/',slug:"Home"},{url:'/account',slug:"Profile"},{url:"/",slug:"Contact-Us"},{url:"/",slug:"Connect"},{url:"/login",slug:"login"},{url:"/",slug:"logout"}]
+  let menus = [{url:'/',slug:"Home"},{url:'/account',slug:"Profile"},{url:"/",slug:"Contact-Us"},{url:"/listing",slug:"ViewAllProduct"},{url:"/login",slug:"login"},{url:"/",slug:"logout"},{url:"/addProduct",slug:"Admin Panel"}]
   const closeMenu = (e) =>{
      let checkedMen = document.getElementById("menu-toggle").checked 
      if(checkedMen ){

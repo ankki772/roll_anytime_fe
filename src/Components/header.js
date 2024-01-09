@@ -1,12 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../Contexts/globalContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import roll_anytime from "../Assets/Images/roll_anytime.png";
+import { getCookies } from "../helpers/cookiehelper";
 export default function Header() {
   const [checkedMenu, setCheckedMenu] = useState(false)
+  let menuItem ;
+  let {logged_in} = getCookies("logged_in");
 
-  let menus = [{url:'/',slug:"Home"},{url:'/account',slug:"Profile"},{url:"/",slug:"Contact-Us"},{url:"/listing",slug:"ViewAllProduct"},{url:"/login",slug:"login"},{url:"/",slug:"logout"},{url:"/addProduct",slug:"Admin Panel"}]
+
+  let menus = [{url:'/',slug:"Home"},{url:'/account',slug:"Profile"},{url:"/",slug:"Contact-Us"},{url:"/listing",slug:"Product List"},{url:"/addProduct",slug:"Admin Panel"},{url:"/login",slug:"Login"},{url:"/",slug:"Logout"}]
+  let loggedMenu = [{url:'/',slug:"Home"},{url:'/account',slug:"Profile"},{url:"/",slug:"Contact-Us"},{url:"/listing",slug:"Product List"},{url:"/addProduct",slug:"Admin Panel"},{url:"/",slug:"Logout"}]
   const closeMenu = (e) =>{
      let checkedMen = document.getElementById("menu-toggle").checked 
      if(checkedMen ){
@@ -19,11 +24,18 @@ export default function Header() {
       }
    
   }
+  useEffect(() => {
+    if (logged_in) {
+      menuItem = menus.filter((item)=>item.slug!='Login')
+      console.log("skdbksndms",menus)
+    }
+  }, [])
+  
   return (
     <>
       <header className="header">
         <nav>
-          <div className="nav_left" onClick={(e)=>closeMenu(e)} >
+          <div className="nav_left" onClick={(e)=>closeMenu(e)}>
             <input type="checkbox" id="menu-toggle" checked={checkedMenu}/>
             <label for="menu-toggle" className="menu-icon">
               &#9776;
@@ -41,23 +53,13 @@ export default function Header() {
                 <span></span>
               </a>
             </div>
-          <ul className="menu" onClick={(e)=>closeMenu(e)}>{
-            menus.map((menuItem,id)=><>
-            <li >
+          <ul className="menu" onClick={(e)=>closeMenu(e)}>
+            {(logged_in?loggedMenu:menus).map((menuItem,id)=><>
+            <li>
               <Link to={menuItem.url} >{menuItem.slug}</Link>
             </li>
             </>)
           }
-{/*             
-            <li>
-              <Link to="/account">Profile</Link>
-            </li>
-            <li>
-              <Link href="#">Projects</Link>
-            </li>
-            <li>
-              <Link href="#">Connect</Link>
-            </li> */}
           </ul>
           </div>
 

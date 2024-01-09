@@ -8,7 +8,7 @@ export const client  = axios.create({
 	baseURL: 'https://rollanytime.onrender.com/api/RA/',
 	// baseURL: ' localhost:8000/api/RA/',
 
-	timeout: 8000,
+	timeout: 12000,
 	headers: {
 		Accept: 'application/json',
     	},

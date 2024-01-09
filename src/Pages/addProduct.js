@@ -3,6 +3,7 @@ import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getCookies } from "../helpers/cookiehelper";
+import { addProduct } from "../Api/Services/products";
  
  
 
@@ -11,7 +12,7 @@ const AddProduct = () => {
   const navigate=useNavigate()
   let {token} = getCookies("token");
 
-  const [addProduct, setAddProduct] = useState({
+  const [productDetail, setProductDetail] = useState({
     product_name: "",
     product_category: "",
     product_brand: "",
@@ -27,7 +28,7 @@ const AddProduct = () => {
     const { name, value, type } = e.target;
     const file = type === "file" ? e.target.files[0] : null;
 
-    setAddProduct((prevProduct) => ({
+    setProductDetail((prevProduct) => ({
       ...prevProduct,
       [name]: type === "file" ? file : value,
     }));
@@ -38,24 +39,16 @@ const AddProduct = () => {
     try {
       const formData = new FormData();
 
-      // Append each field of addProduct to formData
-      for (const key in addProduct) {
-        formData.append(key, addProduct[key]);
+      // Append each field of productDetail to formData
+      for (const key in productDetail) {
+        formData.append(key, productDetail[key]);
       }
 
-      console.log("@@@", addProduct);
+      console.log("@@@", productDetail);
 
-      // Make sure to use formData instead of addProduct directly
-      const response = await axios.post(
-        "https://rollanytime.onrender.com/api/RA/api/RA/product/addProduct",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "authorization": `bearer ${token}`,
-          },
-        }
-      );
+      // Make sure to use formData instead of productDetail directly
+
+      const response = await addProduct(formData)
       console.log(response);
       if (response.status === 200) {
         alert(response.data.message.message);
@@ -74,7 +67,6 @@ const AddProduct = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
           marginTop: "10px",
         }}
       >
@@ -93,96 +85,96 @@ const AddProduct = () => {
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_name"
+                label="Product Name"
                 margin="normal"
                 fullWidth
                 type="text"
                 name="product_name"
-                value={addProduct.product_name}
+                value={productDetail.product_name}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_category"
+                label="Product Category"
                 margin="normal"
                 fullWidth
                 type="text"
                 name="product_category"
-                value={addProduct.product_category}
+                value={productDetail.product_category}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_brand"
+                label="Product Brand"
                 margin="normal"
                 fullWidth
                 type="text"
                 name="product_brand"
-                value={addProduct.product_brand}
+                value={productDetail.product_brand}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_description"
+                label="Product Description"
                 margin="normal"
                 fullWidth
                 type="text"
                 name="product_description"
-                value={addProduct.product_description}
+                value={productDetail.product_description}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_code"
+                label="Product Code"
                 margin="normal"
                 fullWidth
                 type="number"
                 name="product_code"
-                value={addProduct.product_code}
+                value={productDetail.product_code}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="pricing"
+                label="Cost of the Product"
                 margin="normal"
                 fullWidth
                 type="number"
                 name="pricing"
-                value={addProduct.pricing}
+                value={productDetail.pricing}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="rating"
+                label="Rating"
                 margin="normal"
                 fullWidth
                 type="number"
                 name="rating"
-                value={addProduct.rating}
+                value={productDetail.rating}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="quantity"
+                label="Quantity"
                 margin="normal"
                 fullWidth
                 type="number"
                 name="quantity"
-                value={addProduct.quantity}
+                value={productDetail.quantity}
                 onChange={handleChange}
               />
             </Grid>

@@ -46,7 +46,11 @@ export const routes = [
       {
         path:"user/productcart",
         element : <ProtectedRoute><ProductCart/></ProtectedRoute>
-      }
+      },
+      {
+        path: "addProduct",
+        element: <ProtectedRoute><AddProduct/></ProtectedRoute>,
+      },
     ],
   },
   {
@@ -61,8 +65,8 @@ export const routes = [
     path:"/admin",
     element:   <Admin/>
   },
-  {
-    path: "/addProduct",
-    element: <ProtectedRoute><AddProduct/></ProtectedRoute>,
-  },
+  // {
+  //   path: "/addProduct",
+  //   element: <ProtectedRoute><AddProduct/></ProtectedRoute>,
+  // },
 ];

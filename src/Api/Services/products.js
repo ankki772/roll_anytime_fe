@@ -31,3 +31,13 @@ export const getProductDetails = async  (product_id) =>{
     }
 
 }
+export const addProduct = async  (formData) =>{
+    try{
+        let response = await client.post(`product/addProduct`,formData,{authorization:true});       
+        return response ;
+    }
+    catch(err){
+        return [];
+    }
+
+}

@@ -50,8 +50,8 @@ const AddProduct = () => {
 
       const response = await addProduct(formData)
       console.log(response);
-      if (response.status === 200) {
-        alert(response.data.message.message);
+      if (response?.result.length) {
+        alert(response?.message);
         navigate('/listing');
       }
     } catch (error) {

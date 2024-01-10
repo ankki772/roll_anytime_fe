@@ -5,17 +5,14 @@ import Prdlist from "../Components/prdlist";
 export default function MproductListing() {
   return (
     <>
-    <div className="searchPage">
-      <div id="page-content">
-        <div  className="page searchResults">
-               
-                <Prdlist/>
-                
-
+      <div className="searchPage">
+        <div id="page-content">
+          <div className="page searchResults">
+            <Prdlist />
+          </div>
         </div>
-      </div>
 
-    </div>
+      </div>
       <style jsx>
         {`
           #page-content {

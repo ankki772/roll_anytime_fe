@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import SliderCommon from '../Components/common/slideImg';
-import Slider from 'react-slick';
 import { getProductDetails } from '../Api/Services/products';
+import SelectPackage from '../Components/mobile/selectPackage';
+
 export default function Productdetail() {
   const {product_id} = useParams();
   console.log("product id " , product_id)
   const [productDetail, setProductDetail] = useState({})
-  let products = ["https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg",
-"https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg",
-"https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg",
-"https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg"]
 
 useEffect(() => {
   ;(async()=>{
     let result = await getProductDetails(product_id);
-    console.log("jabdkjbsa",result)
     if (result?.result.length) {
         setProductDetail(result?.result[0])
     }
@@ -48,11 +44,11 @@ useEffect(() => {
         <h2>About this item: </h2>
         <p>{productDetail?.product_description}</p>
         <ul>
-          <li>Color: <span>Black</span></li>
-          <li>Available: <span>in stock</span></li>
+          <li>Select Packs: <SelectPackage/></li>
+          {/* <li>Available: <span>in stock</span></li>
           <li>Category: <span>Shoes</span></li>
           <li>Shipping Area: <span>India</span></li>
-          <li>Shipping Fee: <span>Free</span></li>
+          <li>Shipping Fee: <span>Free</span></li> */}
         </ul>
       </div>
 
@@ -185,9 +181,9 @@ img{
 .product-detail ul li{
     margin: 0;
     list-style: none;
-    background: url(https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/checked.png) left center no-repeat;
+    // background: url(https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/checked.png) left center no-repeat;
     background-size: 18px;
-    padding-left: 1.7rem;
+    // padding-left: 1.7rem;
     margin: 0.4rem 0;
     font-weight: 600;
     opacity: 0.9;

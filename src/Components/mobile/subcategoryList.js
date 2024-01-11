@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { dummysubcatlist } from "../../dummyprd";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { getProductByCategory } from "../../Api/Services/products";
 
-export default function SUbcategoryList() {
+export default function SUbcategoryList({categoryName}) {
+  // console.log("Ddddddd",props?.categoryName)
+  const [categoryList, setCategoryList] = useState([])
+
+  useEffect(() => {
+    ;(async () => {
+      let result = await getProductByCategory(categoryName);
+      if (result?.result.length) {
+        setCategoryList(result?.result)
+      }
+    })()
+  }, [categoryName])
+  
   return (
     <>
       <div class="subcat-container">
@@ -13,27 +26,28 @@ export default function SUbcategoryList() {
           <h2>Price</h2>
         </div>
         <ul class="subcat-item-list">
-          {dummysubcatlist.map((item, idx) => (
+          {categoryList.map((item, idx) => (
             <Link to="/account" className="catlist">
               <li class="subcat-item" key={`${idx}_scl`}>
                 <span>
                   <LazyLoadImage
-                    src={item.img_url}
+                    src={item?.product_imges[0]}
                     className="rollanytime_logo"
                     alt="Image Alt"
                     effect="blur"
                   />
                 </span>
-                <span>{item.sub_cat_name}</span>
-                <span>{item.price}</span>
+                <span>{item?.product_name}</span>
+                <span>{item?.pricing}</span>
               </li>
             </Link>
           ))}
+          {categoryList.length>3?
           <Link to='/listing/'>
             <li>
               View all
             </li>
-          </Link>
+          </Link>:null}
         </ul>
       </div>
       <style jsx>{`
@@ -45,7 +59,7 @@ export default function SUbcategoryList() {
           flex-direction: column;
           gap: 10px;
           background-color: #f6f6f6;
-          margin: 0;
+          margin: 10px 0px 0px 0px;
         }
         .subcat-container .top-head {
           width: 100%;

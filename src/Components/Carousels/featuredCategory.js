@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -64,7 +64,23 @@ const Images = [
   },
 ];
 
-export default function featuredItems({categoryList}) {
+export default function FeaturedItems({ categoryList }) {
+  const [categoryName, setCategoryName] = useState(categoryList[0]?.category_name)
+
+  useEffect(() => {
+    setCategoryName(categoryList[0]?.category_name);
+
+  }, [categoryList[0]?.category_name])
+  
+
+  useEffect(() => {
+    // ;(async () => {
+    //   let result = await getProductByCategory(categoryName);
+    //   console.log("result of category",result)
+    //   if (result?.result.length) {
+    //   }
+    // })()
+  }, [])
   const settings = {
     dots: false,
     infinite: true,
@@ -127,32 +143,57 @@ export default function featuredItems({categoryList}) {
       },
     ],
   };
+
+  const categoryHandler = (name)=>{
+    if (isMobile) {
+      // console.log("mobilecategory",name)
+      setCategoryName(name);
+    }
+
+  }
   return (
     <>
       <div className="content">
-        <h2 className="header1">Featured Category</h2>
+        <div className="header-content">
+          <h2 className="header1">Featured Category</h2>
+          <div className="view-all">View All
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="14"
+              fill="currentColor"
+              className="bi bi-chevron-right"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+              />
+            </svg>
+          </div>
+        </div>
         <div className="car-container">
           <Slider {...settings}>
-            {Images.map((item, idx) => (
-              <Link to={"/product/kkk"}>
+            {categoryList.map((item, idx) => (
+              <Link to={!isMobile?"/product/kkk":null} onClick={()=>categoryHandler(item?.category_name)}>
                 <div
                   key={item.id + "fc"}
                   className={`img_wrap ${idx === 0 ? "active_cat" : ""}`}
                 >
                   <img
-                    src={item.src}
-                    alt={item.alt}
+                    src={item?.category_images}
+                    alt={item?.category_name}
                     className="img"
                     loading="lazy"
                   />
-                  <h2 className="title">{item?.category || ""}</h2>
+                  <h2 className="title">{item?.category_name || ""}</h2>
                   {/* <p className="description">{item.description}</p> */}
                 </div>
               </Link>
             ))}
           </Slider>
         </div>
-        {isMobile ? <SUbcategoryList /> : null}
+        {isMobile ? <SUbcategoryList categoryName={categoryName} /> : null}
       </div>
 
       <style jsx>{`
@@ -228,6 +269,15 @@ export default function featuredItems({categoryList}) {
           place-items: center;
           border-radius: 50%;
           background-color: #ccc;
+        }
+        .header-content{
+          position: relative;
+          display: flex;
+        }
+        .view-all{
+          position:absolute;
+          right:25px;
+          top:10px;
         }
       
      

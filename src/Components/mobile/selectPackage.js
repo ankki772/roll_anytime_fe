@@ -19,12 +19,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  '1 Day',
-  '2 Days',
-  '1 Week',
-  
-];
 
 function getStyles(name, personName, theme) {
   return {
@@ -35,11 +29,16 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function SelectPackage() {
+export default function SelectPackage({packs,onChangePack}) {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  const [personName, setPersonName] = React.useState([packs[0]?.pack]);
 
   const handleChange = (event) => {
+    packs.forEach(element => {
+        if (element.pack == event.target.value) {
+            onChangePack(element.price)
+        }
+    });
     const {
       target: { value },
     } = event;
@@ -56,6 +55,7 @@ export default function SelectPackage() {
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
+          defaultValue={packs[0]?.pack}
           value={personName}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
@@ -68,13 +68,14 @@ export default function SelectPackage() {
           )}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {packs.map((name) => (
             <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+              key={name?.pack}
+              value={name?.pack}
+              style={getStyles(name?.pack, personName, theme)}
+              onChange={()=>onChangePack(name?.price)}
             >
-              {name}
+              {name?.pack}
             </MenuItem>
           ))}
         </Select>

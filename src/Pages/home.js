@@ -35,7 +35,6 @@ export default function Home() {
   }
   async function getALlItemslist(){
     const popItems = await getPopularItems();
-        console.log("ressssssssssssss", popItems);
         if (popItems?.result) {
           setPopulatItems(popItems?.result)
         } else {
@@ -47,8 +46,8 @@ export default function Home() {
     <>
       {/* <PopularItems/> */}
       <TopSlider/>
-      {/* <FeaturedCategory categoryList={categoryList}/> */}
-      <FeaturedCategory/>
+      <FeaturedCategory categoryList={categoryList}/>
+      {/* <FeaturedCategory /> */}
       <FeaturedItems populatItem = {populatItems}/>
       {/* <FeaturedItems/> */}
       <About/>

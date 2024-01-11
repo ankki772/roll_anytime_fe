@@ -5,65 +5,73 @@ import { getProductDetails } from '../Api/Services/products';
 import SelectPackage from '../Components/mobile/selectPackage';
 
 export default function Productdetail() {
-  const {product_id} = useParams();
-  console.log("product id " , product_id)
+  const packs = [
+    '1 Day',
+    '2 Days',
+    '1 Week',    
+  ];
+  let priceArr = [{pack:'1 Day',price:200},{pack:'2 Days',price:300},{pack:'1 week',price:1000}]
+  const { product_id } = useParams();
+  console.log("product id ", product_id)
+  const [rentPrice, setRentPrice] = useState('')
   const [productDetail, setProductDetail] = useState({})
+   const onChangePack = (item)=>{
+    setRentPrice(item)
 
-useEffect(() => {
-  ;(async()=>{
-    let result = await getProductDetails(product_id);
-    if (result?.result.length) {
+   }
+
+  useEffect(() => {
+    ; (async () => {
+      let result = await getProductDetails(product_id);
+      if (result?.result.length) {
         setProductDetail(result?.result[0])
-    }
-  })()
+      }
+    })()
+    setRentPrice(priceArr[0]?.price)
 
- 
-}, [])
+
+  }, [])
 
   return (
-  <>
-  <div className = "card-wrapper">
-  <div className = "product_card">
-  
-    <div className = "product-imgs">
-      <div className = "img-display">
-        <SliderCommon topSliderCategory={productDetail?.product_imges||[]} detail/>       
-      </div>
-     
-    </div>
-    
-    <div className = "product-content">
-      <h2 className = "product-title">{productDetail?.product_name}</h2>
-    
+    <>
+      <div className="card-wrapper">
+        <div className="product_card">
 
-      <div className = "product-price">
-        <p className = "new-price">Price: <span>Rs.{productDetail?.pricing}</span></p>
-      </div>
+          <div className="product-imgs">
+            <div className="img-display">
+              <SliderCommon topSliderCategory={productDetail?.product_imges || []} detail />
+            </div>
 
-      <div className = "product-detail">
-        <h2>About this item: </h2>
-        <p>{productDetail?.product_description}</p>
-        <ul>
-          <li>Select Packs: <SelectPackage/></li>
-          {/* <li>Available: <span>in stock</span></li>
-          <li>Category: <span>Shoes</span></li>
-          <li>Shipping Area: <span>India</span></li>
-          <li>Shipping Fee: <span>Free</span></li> */}
-        </ul>
-      </div>
+          </div>
 
-      <div className = "purchase-info">
-        <button type = "button" className = "btn">
-          Add to Cart <i className = "fas fa-shopping-cart"></i>
-        </button>
-      </div>
+          <div className="product-content">
+            <h2 className="product-title">{productDetail?.product_name}</h2>
 
-    </div>
-  </div>
-</div>
-<style jsx>
-  {
-    `
+            <div className="product-detail">
+              <h2>About this item: </h2>
+              <p>{productDetail?.product_description}</p>
+              <ul>
+                <li>Select Packs: <SelectPackage packs={priceArr} onChangePack = {onChangePack}/></li>
+
+              </ul>
+            </div>
+
+            <div className="product-price">
+              <p className="new-price">Price: <span>Rs.{rentPrice}</span></p>
+            </div>
+
+            <div className="purchase-info">
+              <button type="button" className="btn">
+                Add to Cart <i className="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <style jsx>
+        {
+          `
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
 
 *{
@@ -118,15 +126,15 @@ img{
     color: #12263a;
     margin: 1rem 0;
 }
-.product-title::after{
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 4px;
-    width: 80px;
-    background: #12263a;
-}
+// .product-title::after{
+//     content: "";
+//     position: absolute;
+//     left: 0;
+//     bottom: 0;
+//     height: 4px;
+//     width: 80px;
+//     background: #12263a;
+// }
 .product-link{
     text-decoration: none;
     text-transform: uppercase;
@@ -281,8 +289,8 @@ img{
     }
 }
     `
-  }
-</style>
-  </>
+        }
+      </style>
+    </>
   )
 }

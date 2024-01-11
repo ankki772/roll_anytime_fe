@@ -92,17 +92,17 @@ export default function FeaturedItems({ populatItem }) {
         <h2 className="f_heading">Featured Items</h2>
         <h3 className="sub_heading">Explore the featured items with best rating and reviews</h3>
         <div className="f_cards">
-          {Images && Images?.length && Images.slice(0,3)?.map((item) => (
+          {populatItem && populatItem?.length && populatItem.slice(0,3)?.map((item) => (
             // <Link>
 
             
               <div className="featured_card" onClick={()=>navigateProDetail(item)}>
                 <div>
-                  <img src={item?.src} alt={item?.title} className="featured_image" loading="lazy" />
+                  <img src={item?.product_imges[0]} alt={item?.product_name} className="featured_image" loading="lazy" />
                 </div>
                 <div className="img_desc">
-                  <span>{item?.title}</span>
-                  <span>{item?.id}</span>
+                  <span>{item?.product_name}</span>
+                  <span>Rs. {item?.pricing}</span>
                 </div>
               </div>
               // </Link>

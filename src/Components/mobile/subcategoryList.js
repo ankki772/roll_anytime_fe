@@ -5,7 +5,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { getProductByCategory } from "../../Api/Services/products";
 
 export default function SUbcategoryList({categoryName}) {
-  // console.log("Ddddddd",props?.categoryName)
   const [categoryList, setCategoryList] = useState([])
 
   useEffect(() => {
@@ -26,8 +25,8 @@ export default function SUbcategoryList({categoryName}) {
           <h2>Price</h2>
         </div>
         <ul class="subcat-item-list">
-          {categoryList.map((item, idx) => (
-            <Link to="/account" className="catlist">
+          {categoryList.slice(0,3).map((item, idx) => (
+            <Link to="/account" className="catlist" key={idx}>
               <li class="subcat-item" key={`${idx}_scl`}>
                 <span>
                   <LazyLoadImage
@@ -37,16 +36,16 @@ export default function SUbcategoryList({categoryName}) {
                     effect="blur"
                   />
                 </span>
-                <span>{item?.product_name}</span>
+                <span>{item?.product_name?.split(' ').splice(0,2).join(' ')}</span>
                 <span>{item?.pricing}</span>
               </li>
             </Link>
           ))}
           {categoryList.length>3?
-          <Link to='/listing/'>
-            <li>
+          <Link to={`categories/${categoryName}`}>
+            
               View all
-            </li>
+            
           </Link>:null}
         </ul>
       </div>

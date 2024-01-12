@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link, useNavigate  } from 'react-router-dom';
+import { capitalizeFirstLetter } from '../../helpers/helper';
 const Images = [
   {
     id: 1,
@@ -92,65 +93,26 @@ export default function FeaturedItems({ populatItem }) {
         <h2 className="f_heading">Featured Items</h2>
         <h3 className="sub_heading">Explore the featured items with best rating and reviews</h3>
         <div className="f_cards">
-          {populatItem && populatItem?.length && populatItem.slice(0,3)?.map((item) => (
+          {populatItem && !!populatItem?.length && populatItem.slice(0,3)?.map((item) => (
             // <Link>
 
             
-              <div className="featured_card" onClick={()=>navigateProDetail(item)}>
+              <div className="featured_card" onClick={()=>navigateProDetail(item)} key={item?._id}>
                 <div>
                   <img src={item?.product_imges[0]} alt={item?.product_name} className="featured_image" loading="lazy" />
                 </div>
                 <div className="img_desc">
-                  <span>{item?.product_name}</span>
+                  <span>{capitalizeFirstLetter(item?.product_name)}</span>
                   <span>Rs. {item?.pricing}</span>
                 </div>
               </div>
               // </Link>
           ))}
-          {/* <div className="featured_card">
-            <div>
-            <img
-              alt="img"
-              className="featured_image"
-              src="https://images.unsplash.com/photo-1518306727298-4c17e1bf6942?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjl8fGNhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
-            />
-          </div>
-            <div className="img_desc">
-              <span>Mazda 3 sedan</span>
-              <span>Rs.199/day</span>
-            </div>
-          </div>
-          <div className="featured_card">
-            <div>
-            <img
-              alt="img"
-              className="featured_image"
-              src="https://images.unsplash.com/photo-1609034227505-5876f6aa4e90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=464&q=80"
-            />
-          </div>
-            <div className="img_desc">
-              <span>Mazda 3 sedan</span>
-              <span>Rs.199/day</span>
-            </div>
-          </div>
-          <div className="featured_card">
-            <div>
-            <img
-              alt="img"
-              className="featured_image"
-              src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDN8fGNhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
-            />
-          </div>
-            <div className="img_desc">
-              <span>Mazda 3 sedan</span>
-              <span>Rs.199/day</span>
-            </div>
-          </div> */}
 
         </div>
         <a href="#" >
           <div className="btn-container">
-            <button>More</button>
+            <button onClick={()=>{navigate('/popularItem')}}>More</button>
           </div>
         </a>
       </div>
@@ -200,7 +162,7 @@ export default function FeaturedItems({ populatItem }) {
       border-radius:5px 5px 0 0
    }
    .featured_container .featured_card .img_desc{
-    height: 40px;
+    // height: 40px;
     width:100%;
     background-color: #282C35;
     display: flex;

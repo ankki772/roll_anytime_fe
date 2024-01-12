@@ -28,8 +28,16 @@ export const routes = [
         element:<Profile/>
       },
       {
-        path:"categories/:category_name/",
+        path:"/allCategory",
         element:<Categories/>
+      },
+      {
+        path:"categories/:category_name",
+        element:(isMobile && !isTablet)?  <MproductListing/> : <ProductListing/>
+      },
+      {
+        path:"popularItem",
+        element:(isMobile && !isTablet)?  <MproductListing/> : <ProductListing/>
       },
       {
         path:"product/:product_id",

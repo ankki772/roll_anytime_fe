@@ -26,15 +26,6 @@ export default function Home() {
   }
   async function getpopularItemslist(){
     const popItems = await getPopularItems();
-        console.log("ressssssssssssss", popItems);
-        if (popItems?.result) {
-          setPopulatItems(popItems?.result)
-        } else {
-          setPopulatItems([]);
-        }
-  }
-  async function getALlItemslist(){
-    const popItems = await getPopularItems();
         if (popItems?.result) {
           setPopulatItems(popItems?.result)
         } else {
@@ -51,7 +42,6 @@ export default function Home() {
       <FeaturedItems populatItem = {populatItems}/>
       {/* <FeaturedItems/> */}
       <About/>
-    {/* <div style={{height:"800px"}}>Home Page</div> */}
     </>
 
   )

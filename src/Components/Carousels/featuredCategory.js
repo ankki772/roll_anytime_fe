@@ -5,71 +5,15 @@ import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import SUbcategoryList from "../mobile/subcategoryList";
+import { capitalizeFirstLetter } from "../../helpers/helper";
 
-const Images = [
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1552168324-d612d77725e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2FtZXJhfGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 1",
-    Category: "Camera",
-    description:
-      "The Huracán Performante has reworked the concept of super sports cars and taken the notion of performance to levels never seen before.",
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1507494924047-60b8ee826ca9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80",
-    alt: "Image 2 ",
-    Category: "Lights",
-    description:
-      "This Turbo S variant comes with an engine putting out 641 bhp @ 6750 rpm and 800 Nm @ 2500 rpm of max power and max torque respectively.",
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=452&q=80",
-    alt: "Image 3",
-    category: "Cabs",
-    description: "For offroad lovers. Super fast, Super Comfortable.",
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 4",
-    category: "Food ",
-    description:
-      "Aventador SV provide thrills unlike anything that has ever been experienced before.",
-  },
-  {
-    id: 5,
-    src: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWFrZXVwfGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 5",
-    category: "Makeup ",
-    description:
-      "0 to 100 km/h (0 to 62 mph) takes 3.0 seconds and the Spider is capable of a top speed of 400 km/h (249 mph).",
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1611425094224-ab2b0eab0458?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y3Jld3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 6",
-    category: "Crew",
-    description:
-      "The Porsche 911 (pronounced Nine Eleven or in German: Neunelfer) is a two-door 2+2 high performance rear-engined sports car.",
-  },
-  {
-    id: 7,
-    src: "https://images.unsplash.com/photo-1611048268330-53de574cae3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8d2FyZHJvYmV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 7",
-    category: "Wardrobe",
-    description:
-      "The Challenger has a classic muscle-car interior, with a simple design",
-  },
-];
 
 export default function FeaturedItems({ categoryList }) {
+  console.log("first,",categoryList)
   const [categoryName, setCategoryName] = useState(categoryList[0]?.category_name)
 
   useEffect(() => {
     setCategoryName(categoryList[0]?.category_name);
-
   }, [categoryList[0]?.category_name])
   
 
@@ -132,7 +76,7 @@ export default function FeaturedItems({ categoryList }) {
         settings: {
           arrows: false,
           dots: false,
-          infinite: false,
+          // infinite: false,
           slidesToShow: 3.5,
           slidesToScroll: 1,
           autoplay: false,
@@ -156,7 +100,8 @@ export default function FeaturedItems({ categoryList }) {
       <div className="content">
         <div className="header-content">
           <h2 className="header1">Featured Category</h2>
-          <div className="view-all">View All
+          <div className="view-all">            
+            <Link to={'/allCategory'}>View All</Link>
           <svg
               xmlns="http://www.w3.org/2000/svg"
               width="12"
@@ -175,7 +120,7 @@ export default function FeaturedItems({ categoryList }) {
         <div className="car-container">
           <Slider {...settings}>
             {categoryList.map((item, idx) => (
-              <Link to={!isMobile?"/product/kkk":null} onClick={()=>categoryHandler(item?.category_name)}>
+              <Link to={!isMobile?`categories/${item?.category_name}`:null} onClick={()=>categoryHandler(item?.category_name)} key={item?._id}>
                 <div
                   key={item.id + "fc"}
                   className={`img_wrap ${idx === 0 ? "active_cat" : ""}`}
@@ -186,7 +131,7 @@ export default function FeaturedItems({ categoryList }) {
                     className="img"
                     loading="lazy"
                   />
-                  <h2 className="title">{item?.category_name || ""}</h2>
+                  <h2 className="title">{capitalizeFirstLetter(item?.category_name || "")}</h2>
                   {/* <p className="description">{item.description}</p> */}
                 </div>
               </Link>

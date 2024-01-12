@@ -70,6 +70,7 @@ export default function Footer() {
         footer {
           color: #333;
           background-color: #3e60948a;
+          
         }
 
         .row {

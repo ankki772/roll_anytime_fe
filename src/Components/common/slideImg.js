@@ -16,9 +16,9 @@ export default function SlideImg({topSliderCategory,detail=false}) {
   return (
   <>
   <Slider {...settings}>
-            {topSliderCategory.map((item) => (
+            {topSliderCategory.map((item,id) => (
              
-                 <div className='container-base myx-stretch'>
+                 <div className='container-base myx-stretch' key={id}>
                     <div style={{paddingBottom:"50px"}}>
                         <div className='container-container container-aspectContainer'>
                             <div className=' row-base'>

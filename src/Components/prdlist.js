@@ -1,22 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Searchfilter from "../Components/bottomstrip";
 import { products } from "../dummyprd";
 import SortbyDrawer from "./sortbyDrawer";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { getAllItems } from "../Api/Services/products";
+import { getAllItems, getPopularItems, getProductByCategory } from "../Api/Services/products";
+import { capitalizeFirstLetter } from "../helpers/helper";
 function Prdlist() {
-
+  let { category_name } = useParams();
+  const { pathname } = useLocation();
   const [productList, setProductList] = useState([])
   useEffect(() => {
-    // getpopularItemslist();
     ; (async () => {
       try {
-        let result = await getAllItems();
-        if (result?.result.length) {
-          setProductList(result?.result)
+        if (category_name) {
+          let result = await getProductByCategory(category_name);
+          if (result?.result.length) {
+            setProductList(result?.result)
+          }
         }
+        else if (pathname == '/popularItem') {
+          let result = await getPopularItems();
+          if (result?.result.length) {
+            setProductList(result?.result)
+          }
+        }
+        else {
+          let result = await getAllItems();
+          if (result?.result.length) {
+            setProductList(result?.result)
+          }
+        }
+
       } catch (error) {
 
       }
@@ -47,9 +63,10 @@ function Prdlist() {
                           <section className="sc-rzOft kLNdwA"></section>
                         </section>
                         <div className="sc-jklikK fomxOG">
-                          <h3 className="sc-fxmata sc-izfUZz kiIscI">{product?.product_name}</h3>
+                          <h3 className="sc-fxmata sc-izfUZz kiIscI">{capitalizeFirstLetter(product?.product_name)}</h3>
                           <div className="sc-eqGige dKRZxZ">
-                            {product?.product_description}
+                            {/* {product?.product_description} */}
+                            {`${product?.product_description.substring(0, 70)}${product?.product_description.length > 70 ? '...' : null}`}
                           </div>
                           <div className="sc-eqGige dKRZxZ">
                             <span style={{ color: 'black' }}>Price : </span>   Rs. {product?.pricing}

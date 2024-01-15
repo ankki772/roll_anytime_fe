@@ -19,12 +19,12 @@ export default function Categories() {
   }, [])
 
   return (<>
-    <div class="item">
+    <div className="item">
 
       {categoriesList && !!categoriesList.length && categoriesList.map((item) => {
         return (
-          <div class="card" onClick={()=>{navigate(`/categories/${item?.category_name}`)}}>
-            <div class="pos" style={{backgroundImage:`url(${item?.category_images})`,color:"red"}}><div class="abv abv1">{capitalizeFirstLetter(item?.category_name)}</div></div>
+          <div className="card" onClick={()=>{navigate(`/categories/${item?.category_name}`)}}>
+            <div className="pos" style={{backgroundImage:`url(${item?.category_images})`,color:"red"}}><div className="abv abv1">{capitalizeFirstLetter(item?.category_name)}</div></div>
             <h2>"Italian Spicy cuisine"</h2>
           </div>
         )

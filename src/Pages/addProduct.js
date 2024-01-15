@@ -1,17 +1,36 @@
-import React, { useState } from "react";
-import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getCookies } from "../helpers/cookiehelper";
 import { addProduct } from "../Api/Services/products";
- 
- 
+import { getAllCategories } from "../Api/Services/category";
+import { capitalizeFirstLetter } from "../helpers/helper";
+
+
 
 const AddProduct = () => {
-  
-  const navigate=useNavigate()
-  let {token} = getCookies("token");
+  const categoryref = useRef(null)
+  const navigate = useNavigate()
+  const [categoryList, setCategoryList] = useState([])
+  const [dialogOpen, setDialogOpen] = useState(false)
+  let { token } = getCookies("token");
 
+
+  useEffect(() => {
+    ; (async () => {
+      const categoriesList = await getAllCategories();
+      if (categoriesList?.result) {
+        setCategoryList(categoriesList?.result)
+      } else {
+        setCategoryList([]);
+      }
+    })()
+  }, [])
+
+  const openDialog = () => {
+    setDialogOpen(!dialogOpen)
+  }
   const [productDetail, setProductDetail] = useState({
     product_name: "",
     product_category: "",
@@ -25,6 +44,7 @@ const AddProduct = () => {
   });
 
   const handleChange = (e) => {
+    console.log("sdsdsdsd", e.target.name)
     const { name, value, type } = e.target;
     const file = type === "file" ? e.target.files[0] : null;
 
@@ -32,6 +52,17 @@ const AddProduct = () => {
       ...prevProduct,
       [name]: type === "file" ? file : value,
     }));
+  };
+  const handleCategory = () => {
+    setCategoryList((prevProduct) => ([
+      ...prevProduct,
+      {['category_name']:categoryref.current.value},
+    ]));
+    setProductDetail((prevProduct) => ({
+      ...prevProduct,
+      ['product_category']: categoryref.current.value,
+    }));
+    setDialogOpen(!openDialog)
   };
 
   const handleClick = async (e) => {
@@ -94,17 +125,55 @@ const AddProduct = () => {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                label="Product Category"
-                margin="normal"
-                fullWidth
-                type="text"
-                name="product_category"
-                value={productDetail.product_category}
-                onChange={handleChange}
-              />
+            <Grid item xs={12} sm={12} md={12}>
+              <FormControl sx={{ width: '100%' }} fullWidth>
+                <InputLabel id="demo-simple-select-autowidth-label" >Product Category</InputLabel>
+                <Select
+                  labelId="demo-simple-select-autowidth-labe"
+                  id="demo-simple-select-helper"
+                  value={productDetail.product_category??''}
+                  label="Product Category"
+                  name="product_category"
+                  onChange={handleChange}
+                >
+                  {categoryList.map((name,id) => (
+                    <MenuItem
+                      key={`${name?.category_name}${id}`}
+                      value={name?.category_name ??''}
+                    >
+                      {capitalizeFirstLetter(name?.category_name)}
+                    </MenuItem>
+                  ))}
+                  <MenuItem style={{ background: 'transparent' }} onClick={openDialog} data-testid="menuQuotesPlaceholderId">
+                    <Button data-testid="addVendorId">
+                      Add a Category
+                    </Button>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              <Dialog
+                open={dialogOpen}
+                onClose={openDialog}
+              >
+                <DialogTitle>Product Category</DialogTitle>
+                <DialogContent>
+                  <TextField
+                    required
+                    label="Product Category"
+                    margin="normal"
+                    fullWidth
+                    type="text"
+                    name="product_category"
+                    inputRef={categoryref}
+                    value={productDetail.product_category}
+                    // onChange={handleChange}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={openDialog}>Cancel</Button>
+                  <Button onClick={handleCategory}>Add a Category</Button>
+                </DialogActions>
+              </Dialog>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -204,6 +273,6 @@ const AddProduct = () => {
       </Grid>
     </>
   );
-};  
+};
 
 export default AddProduct;

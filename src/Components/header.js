@@ -1,17 +1,18 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../Contexts/globalContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import roll_anytime from "../Assets/Images/roll_anytime.png";
-import { getCookies } from "../helpers/cookiehelper";
+import { getCookies, removeCookies } from "../helpers/cookiehelper";
+import Cookies from "js-cookie";
 export default function Header() {
   const [checkedMenu, setCheckedMenu] = useState(false)
-  let menuItem;
+  // let navigate = useNavigate();
   let { logged_in } = getCookies("logged_in");
+  let role = Cookies.get('role')
 
 
-  let menus = [{ url: '/', slug: "Home" }, { url: '/account', slug: "Profile" }, { url: "/", slug: "Contact-Us" }, { url: "/listing", slug: "Product List" }, { url: "/addProduct", slug: "Admin Panel" }, { url: "/login", slug: "Login" }, { url: "/", slug: "Logout" }]
-  let loggedMenu = [{ url: '/', slug: "Home" }, { url: '/account', slug: "Profile" }, { url: "/", slug: "Contact-Us" }, { url: "/listing", slug: "Product List" }, { url: "/addProduct", slug: "Admin Panel" }, { url: "/", slug: "Logout" }]
+  let menus = [{ url: '/', slug: "Home" }, { url: '/account', slug: "Profile" }, { url: "/listing", slug: "Product List" }, { url: "/", slug: "Contact-Us" }, { url: "/", slug: "Logout" }]
   const closeMenu = (e) => {
     let checkedMen = document.getElementById("menu-toggle").checked
     if (checkedMen) {
@@ -24,11 +25,15 @@ export default function Header() {
     }
 
   }
-  useEffect(() => {
-    if (logged_in) {
-      menuItem = menus.filter((item) => item.slug != 'Login')
-    }
-  }, [])
+ 
+
+  const logoutHandler=()=>{
+    console.log("loggeoutclicked")
+    removeCookies('logged_in','role','token')
+    // Cookies.remove('logged_in')
+    // Cookies.remove('role')
+    // navigate('/')
+  }
 
   return (
     <>
@@ -36,12 +41,12 @@ export default function Header() {
         <nav>
           <div className="nav_left" onClick={(e) => closeMenu(e)}>
             <input type="checkbox" id="menu-toggle" checked={checkedMenu} />
-            <label for="menu-toggle" className="menu-icon">
+            <label htmlFor="menu-toggle" className="menu-icon">
               &#9776;
             </label>
 
             <div className="logo">
-              <a href="index.html">
+              <a href="">
                 <LazyLoadImage
                   src={roll_anytime}
                   className="rollanytime_logo"
@@ -53,10 +58,22 @@ export default function Header() {
               </a>
             </div>
             <ul className="menu" onClick={(e) => closeMenu(e)}>
-              {(logged_in ? loggedMenu : menus).map((menuItem, id) => <>
-                <li key={id}>
-                  <Link to={menuItem.url}>{menuItem.slug}</Link>
-                </li>
+              {menus.map((menuItem, id) => <>
+                {id === 4 && !logged_in ?
+                  <li key={`${id}${'login'}`}>
+                    <Link to={'/login'}>Login</Link>
+                  </li> 
+                  : null}
+                 {( id === menus.length-1 && role === 'Admin')?
+                  <li key={`${id}${'admin'}`}>
+                    <Link to={'/addProduct'}>Admin Panel</Link>
+                  </li>
+                  : null}
+                  <li key={`${id}${menuItem.slug}`}>
+                    <Link to={menuItem?.slug!='Logout' ? menuItem.url :null} onClick={menuItem?.slug=='Logout'?()=>logoutHandler():null }>{menuItem.slug}</Link>
+                  </li>
+                  
+                
               </>)
               }
             </ul>
@@ -71,7 +88,7 @@ export default function Header() {
                     width="32"
                     height="32"
                     fill="#3E4152"
-                    class="bi bi-person"
+                    className="bi bi-person"
                     viewBox="0 0 16 16"
                   >
                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />

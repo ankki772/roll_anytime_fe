@@ -51,27 +51,27 @@ export default function ProductListing() {
                 <span className="vertical-filters-header "> CATEGORIES</span>
                 <ul className="categories-list">
                   <li>
-                    <label class="common-customCheckbox vertical-filters-label">
+                    <label className="common-customCheckbox vertical-filters-label">
                       <input type="checkbox" value="Tshirts" />
                       "Tshirts"
-                      <span class="categories-num"></span>
-                      <div class="common-checkboxIndicator"></div>
+                      <span className="categories-num"></span>
+                      <div className="common-checkboxIndicator"></div>
                     </label>
                   </li>
                   <li>
-                    <label class="common-customCheckbox vertical-filters-label">
+                    <label className="common-customCheckbox vertical-filters-label">
                       <input type="checkbox" value="Tshirts" />
                       "Tshirts"
-                      <span class="categories-num"></span>
-                      <div class="common-checkboxIndicator"></div>
+                      <span className="categories-num"></span>
+                      <div className="common-checkboxIndicator"></div>
                     </label>
                   </li>
                   <li>
-                    <label class="common-customCheckbox vertical-filters-label">
+                    <label className="common-customCheckbox vertical-filters-label">
                       <input type="checkbox" value="Tshirts" />
                       "Tshirts"
-                      <span class="categories-num"></span>
-                      <div class="common-checkboxIndicator"></div>
+                      <span className="categories-num"></span>
+                      <div className="common-checkboxIndicator"></div>
                     </label>
                   </li>
                 </ul>

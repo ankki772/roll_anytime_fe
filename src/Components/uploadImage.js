@@ -26,7 +26,7 @@ export default function Uploadimage(props) {
   console.log("previewURL", previewURL);
   return (
     <>
-      <div class="image-upload">
+      <div className="image-upload">
         <label for="file-input">
           <img
             className="upload-icon"

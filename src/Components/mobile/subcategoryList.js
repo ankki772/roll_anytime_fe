@@ -18,16 +18,16 @@ export default function SUbcategoryList({categoryName}) {
   
   return (
     <>
-      <div class="subcat-container">
-        <div class="top-head">
+      <div className="subcat-container">
+        <div className="top-head">
           <h2>Most popular</h2>
           <h2>Name</h2>
           <h2>Price</h2>
         </div>
-        <ul class="subcat-item-list">
+        <ul className="subcat-item-list">
           {categoryList.slice(0,3).map((item, idx) => (
-            <Link to="/account" className="catlist" key={idx}>
-              <li class="subcat-item" key={`${idx}_scl`}>
+            <Link to={`/product/${item?.product_id}`} className="catlist" key={idx}>
+              <li className="subcat-item" key={`${idx}_scl`}>
                 <span>
                   <LazyLoadImage
                     src={item?.product_imges[0]}

@@ -3,19 +3,24 @@ import { Link } from "react-router-dom";
 import { dummysubcatlist } from "../../dummyprd";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { getProductByCategory } from "../../Api/Services/products";
+import SelectPackage from "./selectPackage";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Button } from "@mui/material";
+import LongMenu from "./menuDrop";
 
-export default function SUbcategoryList({categoryName}) {
+export default function SUbcategoryList({ categoryName }) {
   const [categoryList, setCategoryList] = useState([])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       let result = await getProductByCategory(categoryName);
       if (result?.result.length) {
         setCategoryList(result?.result)
       }
     })()
   }, [categoryName])
-  
+
+  let priceArr = [{ pack: '1 Day', price: 200 }, { pack: '2 Days', price: 300 }, { pack: '1 week', price: 1000 }]
   return (
     <>
       <div className="subcat-container">
@@ -23,10 +28,10 @@ export default function SUbcategoryList({categoryName}) {
           <h2>Most popular</h2>
           <h2>Name</h2>
           <h2>Price</h2>
+          <h2>Action</h2>
         </div>
         <ul className="subcat-item-list">
-          {categoryList.slice(0,3).map((item, idx) => (
-            <Link to={`/product/${item?.product_id}`} className="catlist" key={idx}>
+          {categoryList.slice(0, 3).map((item, idx) => (
               <li className="subcat-item" key={`${idx}_scl`}>
                 <span>
                   <LazyLoadImage
@@ -36,17 +41,17 @@ export default function SUbcategoryList({categoryName}) {
                     effect="blur"
                   />
                 </span>
-                <span>{item?.product_name?.split(' ').splice(0,2).join(' ')}</span>
+                <span>{item?.product_name?.split(' ').splice(0, 2).join(' ')}</span>
                 <span>{item?.pricing}</span>
-              </li>
-            </Link>
+                <span><LongMenu viewProduct={`/product/${item?.product_id}`} packs={priceArr} /></span>
+                </li>
           ))}
-          {categoryList.length>3?
-          <Link to={`categories/${categoryName}`}>
-            
+          {categoryList.length > 3 ?
+            <Link to={`categories/${categoryName}`}>
+
               View all
-            
-          </Link>:null}
+
+            </Link> : null}
         </ul>
       </div>
       <style jsx>{`

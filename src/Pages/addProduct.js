@@ -37,14 +37,13 @@ const AddProduct = () => {
     product_brand: "",
     product_description: "",
     product_code: "",
-    pricing: "",
+    product_pack: [{ size: '', price: '' }],
     rating: "",
     productImg: "",
     quantity: "",
   });
 
   const handleChange = (e) => {
-    console.log("sdsdsdsd", e.target.name)
     const { name, value, type } = e.target;
     const file = type === "file" ? e.target.files[0] : null;
 
@@ -53,10 +52,27 @@ const AddProduct = () => {
       [name]: type === "file" ? file : value,
     }));
   };
+  const handlePackChange = (index, e) => {
+    const { name, value } = e.target;
+    setProductDetail((prevData) => {
+      const updatedPack = [...prevData.product_pack];
+      updatedPack[index][name] = value;
+      return {
+        ...prevData,
+        product_pack: updatedPack,
+      };
+    });
+  };
+  const addPackField = () => {
+    setProductDetail((prevData) => ({
+      ...prevData,
+      product_pack: [...prevData.product_pack, { size: '', price: '' }],
+    }));
+  };
   const handleCategory = () => {
     setCategoryList((prevProduct) => ([
       ...prevProduct,
-      {['category_name']:categoryref.current.value},
+      { ['category_name']: categoryref.current.value },
     ]));
     setProductDetail((prevProduct) => ({
       ...prevProduct,
@@ -72,7 +88,12 @@ const AddProduct = () => {
 
       // Append each field of productDetail to formData
       for (const key in productDetail) {
-        formData.append(key, productDetail[key]);
+        if (typeof productDetail[key] === 'object' && Array.isArray(productDetail[key])) {
+          formData.append(key, JSON.stringify(productDetail[key]));
+        }
+        else{
+          formData.append(key, productDetail[key]);
+        }
       }
 
       console.log("@@@", productDetail);
@@ -131,15 +152,15 @@ const AddProduct = () => {
                 <Select
                   labelId="demo-simple-select-autowidth-labe"
                   id="demo-simple-select-helper"
-                  value={productDetail.product_category??''}
+                  value={productDetail.product_category ?? ''}
                   label="Product Category"
                   name="product_category"
                   onChange={handleChange}
                 >
-                  {categoryList.map((name,id) => (
+                  {categoryList.map((name, id) => (
                     <MenuItem
                       key={`${name?.category_name}${id}`}
-                      value={name?.category_name ??''}
+                      value={name?.category_name ?? ''}
                     >
                       {capitalizeFirstLetter(name?.category_name)}
                     </MenuItem>
@@ -166,7 +187,7 @@ const AddProduct = () => {
                     name="product_category"
                     inputRef={categoryref}
                     value={productDetail.product_category}
-                    // onChange={handleChange}
+                  // onChange={handleChange}
                   />
                 </DialogContent>
                 <DialogActions>
@@ -214,18 +235,6 @@ const AddProduct = () => {
             <Grid item xs={12}>
               <TextField
                 required
-                label="Cost of the Product"
-                margin="normal"
-                fullWidth
-                type="number"
-                name="pricing"
-                value={productDetail.pricing}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
                 label="Rating"
                 margin="normal"
                 fullWidth
@@ -246,6 +255,43 @@ const AddProduct = () => {
                 value={productDetail.quantity}
                 onChange={handleChange}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>Add Pack</Typography>
+              <Grid container gap={4}>
+                {productDetail?.product_pack.map((pack, index) => (
+                  <>
+                    <Grid item xs={5}>
+                      <TextField
+                        required
+                        label="Pack Size"
+                        margin="normal"
+                        fullWidth
+                        type="text"
+                        name="size"
+                        value={pack.size}
+                        onChange={(e) => handlePackChange(index, e)}
+                      />
+                    </Grid>
+                    <Grid item xs={5}>
+                      <TextField
+                        required
+                        label="Pack Price"
+                        margin="normal"
+                        fullWidth
+                        type="text"
+                        name="price"
+                        value={pack.price}
+                        onChange={(e) => handlePackChange(index, e)}
+                      />
+                    </Grid>
+                  </>
+                ))}
+                <Grid item xs={12}>
+                  <Button variant="contained" fullWidth onClick={addPackField}>Add </Button>
+                </Grid>
+              </Grid>
+
             </Grid>
             <Grid item xs={12}>
               <TextField

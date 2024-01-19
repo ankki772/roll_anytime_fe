@@ -78,7 +78,7 @@ export default function FeaturedItems({ categoryList }) {
           dots: false,
           // infinite: false,
           slidesToShow: 3.5,
-          slidesToScroll: 1,
+          slidesToScroll: 3.5,
           autoplay: false,
           speed: 1000,
           autoplaySpeed: 7000,

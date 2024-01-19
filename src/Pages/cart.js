@@ -1,6 +1,43 @@
+import { Button } from "@mui/material";
 import React from "react";
+import {loadStripe} from '@stripe/stripe-js';
+
 
 export default function Cart() {
+
+  let carts = [{
+    productId:"bkjbjsn",
+    productName:"Tshirt",
+    quantity:2,
+    price:100
+  }]
+
+  const makePayment = async()=>{
+    const stripe = await loadStripe('pk_test_51OZvJBSGaKsXrSjrOGSV2Nf77fT8XTECnkJBvzF8nzfiJTQsHi3dFE8ZfdpshF5ZWPAxGn6WAmnXjAb29qNFK3Gi001tdFMBLi');
+
+    const body = {
+        products:carts
+    }
+    const headers = {
+        "Content-Type":"application/json"
+    }
+    const response = await fetch("https://d39e-2405-201-402e-a058-a031-5b71-ab64-e44c.ngrok-free.app/api/RA/product/create_payment",{
+        method:"POST",
+        headers:headers,
+        body:JSON.stringify(body)
+    });
+
+    const session = await response.json();
+
+    const result = stripe.redirectToCheckout({
+        sessionId:session.id
+    });
+    
+    if(result.error){
+        console.log(result.error);
+    }
+}
+
   return (
     <>
       <div className="cart-wrapper">
@@ -83,6 +120,10 @@ export default function Cart() {
           <div className="total-amount">
               <span>Total Amount</span>
               <span>Rs. 1800</span>
+            </div>
+          <div className="total-amount">
+              <span></span>
+              <span><Button style={{background:'red',color:'white'}} onClick={makePayment}>Proceed</Button></span>
             </div>
         </section>
       </div>

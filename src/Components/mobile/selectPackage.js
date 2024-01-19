@@ -29,7 +29,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function SelectPackage({packs,onChangePack}) {
+export default function SelectPackage({packs,onChangePack,width=300}) {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([packs[0]?.pack]);
 
@@ -50,7 +50,7 @@ export default function SelectPackage({packs,onChangePack}) {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
+      <FormControl sx={{ m: 1, width: width }}>
         <InputLabel id="demo-multiple-chip-label">Select</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"

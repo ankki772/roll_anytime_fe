@@ -13,6 +13,7 @@ import ProtectedRoute from "./Utils/protectedRoute";
 import { ProductCart } from "./Components/productCart";
 import { isMobile,isTablet } from "react-device-detect";
 import Cart from "./Pages/cart";
+import Success from "./Components/common/success";
 export const routes = [
   {
     path: "/",
@@ -58,6 +59,10 @@ export const routes = [
       {
         path: "addProduct",
         element: <ProtectedRoute><AddProduct/></ProtectedRoute>,
+      },
+      {
+        path: "success",
+        element: <Success/>,
       },
     ],
   },

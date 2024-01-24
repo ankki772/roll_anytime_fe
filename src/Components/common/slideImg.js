@@ -36,7 +36,7 @@ export default function SlideImg({topSliderCategory,detail=false}) {
                  </div>           
             ))}
           </Slider>
-        <style jsx>
+        <style jsx='true'>
             {`
                    .container-base {
                     -webkit-box-sizing: border-box;

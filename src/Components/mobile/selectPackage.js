@@ -31,11 +31,16 @@ function getStyles(name, personName, theme) {
 
 export default function SelectPackage({packs,onChangePack,width=300}) {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([packs[0]?.pack]);
+  const [personName, setPersonName] = React.useState([packs[0]?.size]);
+
+  React.useEffect(() => {
+    setPersonName([packs[0]?.size])
+  }, [packs])
+  
 
   const handleChange = (event) => {
     packs.forEach(element => {
-        if (element.pack == event.target.value) {
+        if (element.size == event.target.value) {
             onChangePack(element.price)
         }
     });
@@ -55,14 +60,14 @@ export default function SelectPackage({packs,onChangePack,width=300}) {
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
-          defaultValue={packs[0]?.pack}
+          defaultValue={packs[0]?.size}
           value={personName}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
+              {selected.map((value,id) => (
+                <Chip key={id} label={value} />
               ))}
             </Box>
           )}
@@ -70,12 +75,12 @@ export default function SelectPackage({packs,onChangePack,width=300}) {
         >
           {packs.map((name) => (
             <MenuItem
-              key={name?.pack}
-              value={name?.pack}
-              style={getStyles(name?.pack, personName, theme)}
+              key={name?.size}
+              value={name?.size}
+              style={getStyles(name?.size, personName, theme)}
               onChange={()=>onChangePack(name?.price)}
             >
-              {name?.pack}
+              {name?.size}
             </MenuItem>
           ))}
         </Select>

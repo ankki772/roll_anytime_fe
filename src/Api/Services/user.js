@@ -1,7 +1,7 @@
 import { client } from "../client";
 export const signup = async (userDetail) => {
   try {
-    let response = await client.post("/user/register", userDetail,{authorization:false});
+    let response = await client.post("/user/register", userDetail, { authorization: false });
     return response;
   } catch (err) {
     console.log(err);
@@ -11,7 +11,7 @@ export const signup = async (userDetail) => {
 
 export const signInUser = async (userDetail) => {
   try {
-    let response = await client.post("/user/login", userDetail,{authorization:false});
+    let response = await client.post("/user/login", userDetail, { authorization: false });
     return response;
   } catch (err) {
     console.log(err);
@@ -19,35 +19,56 @@ export const signInUser = async (userDetail) => {
   }
 };
 
-export const updateUserDetail = async (userDetail)=>{
-  try{
-    let response = await client.patch("/user/updateUser", userDetail,{authorization:true})
+export const updateUserDetail = async (userDetail) => {
+  try {
+    let response = await client.patch("/user/updateUser", userDetail, { authorization: true })
     return response
   }
-  catch(err){
-    console.log("errr",err)
+  catch (err) {
+    console.log("errr", err)
     return "Error"
   }
 }
 
-export const  getUserDetail= async ()=>{
-try{
+export const getUserDetail = async () => {
+  try {
 
-  let response = await client.get('/user/getUser',{authorization:true})
-  return response.data
-}
-catch(err){
-  console.log("pp",err)
-  return "Error"
-}
-}
-export const addProductToCart = async  (data) =>{
-  try{
-      let response = await client.post(`user/addProducttoCart`,data,{authorization:true});       
-      return response ;
+    let response = await client.get('/user/getUser', { authorization: true })
+    return response.data
   }
-  catch(err){
-      return [];
+  catch (err) {
+    console.log("pp", err)
+    return "Error"
+  }
+}
+export const getUsercartData = async () => {
+  try {
+
+    let response = await client.get('/user/getUserCartData', { authorization: true })
+    return response?.cartData
+  }
+  catch (err) {
+    console.log("pp", err)
+    return "Error"
+  }
+}
+export const addProductToCart = async (data) => {
+  try {
+    let response = await client.post(`user/addProducttoCart`, data, { authorization: true });
+    return response;
+  }
+  catch (err) {
+    return [];
+  }
+
+}
+export const removeProductfromCart = async (data) => {
+  try {
+    let response = await client.post(`user/removeProducttoCart`, data, { authorization: true });
+    return response;
+  }
+  catch (err) {
+    return [];
   }
 
 }

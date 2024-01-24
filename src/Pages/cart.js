@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@mui/material";
 import {loadStripe} from '@stripe/stripe-js';
-import { getUserDetail } from "../Api/Services/user";
+import { getUserDetail, getUsercartData } from "../Api/Services/user";
+import { totalsumCartPrice } from "../helpers/helper";
+import { removeDatafromCart } from "../Redux/Slices/cartSlices";
 
 export default function Cart() {
+  let dispatch = useDispatch();
+
   const cart = useSelector((state) => state.cart)
-  const [userCartData, setUserCartData] = useState({})
   console.log("first,",cart)
+  const [userCartData, setUserCartData] = useState([])
+  const [cartPrice, setCartPrice] = useState(0)
   useEffect(() => {
     ;(async()=>{
 
-      const userData = await getUserDetail();
+      const userData = await getUsercartData();
       console.log("userdetails",userData);
-      setUserCartData(userData[0].cart_items)
+      setUserCartData(userData)
+      setCartPrice(totalsumCartPrice(userData))
     })()
-  }, [])
+  }, [cart.status])
   let carts = [{
     productId:"bkjbjsn",
     productName:"Tshirt",
@@ -48,6 +54,11 @@ export default function Cart() {
         console.log(result.error);
     }
 }
+
+const removeHandler = (product_id)=>{
+  console.log("productId",product_id)
+  dispatch(removeDatafromCart({product_id}))
+}
   
   return (
     <>
@@ -57,7 +68,7 @@ export default function Cart() {
             {userCartData && !!userCartData.length && userCartData.map((item,id)=>{
 
             return <li key={item?._id}>
-              <div class="product">
+              <div className="product">
                 <img
                   src={item?.product_imges[0]}
                   alt=""
@@ -71,7 +82,7 @@ export default function Cart() {
                   </div>
 
                   <div className="product-removal">
-                    <button className="remove-product">Remove</button>
+                    <button className="remove-product" onClick={()=>removeHandler(item?.product_id)}>Remove</button>
                   </div>
                 </div>
               </div>
@@ -83,17 +94,17 @@ export default function Cart() {
           <div className="total-title">Price Details</div>
           <div className="total-detail">
             <div className="total-price">
-              <span>Price (6 items)</span>
-              <span>Rs .1800</span>
+              <span>Price ({userCartData.length} items)</span>
+              <span>Rs .{cartPrice}</span>
             </div>
-            <div className="total-price">
+            {/* <div className="total-price">
               <span>Delivery Charges</span>
               <span>Rs. 880</span>
-            </div>
+            </div> */}
           </div>
           <div className="total-amount">
               <span>Total Amount</span>
-              <span>Rs. 1800</span>
+              <span>Rs. {cartPrice}</span>
             </div>
           <div className="total-amount">
               <span></span>

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getProductDetails } from '../../Api/Services/products';
-import { addProductToCart } from '../../Api/Services/user';
+import { addProductToCart, removeProductfromCart } from '../../Api/Services/user';
 
 const initialState = {
   data:[],
@@ -59,6 +59,21 @@ const cartSlice = createSlice({
           state.error = action.error.message;
         });
     },
+    extraReducers: (builder) => {
+      builder
+        .addCase(removeDatafromCart.pending, (state) => {
+          state.status = 'loading';
+        })
+        .addCase(removeDatafromCart.fulfilled, (state, action) => {
+          console.log("action from api",action)
+          state.status = 'succeeded';
+          state.data.push(action.payload.result)
+        })
+        .addCase(removeDatafromCart.rejected, (state, action) => {
+          state.status = 'failed';
+          state.error = action.error.message;
+        });
+    },
 });
 
 
@@ -68,7 +83,12 @@ export const addDataTocart = createAsyncThunk('data/fetchData', async (data, thu
   // console.log("first,",response)
   return response;
 });
+export const removeDatafromCart = createAsyncThunk('data/removeData', async (data, thunkAPI) => {
+  console.log("fetchdatato the cart",data)
+  const response = await removeProductfromCart(data);
+  return response;
+});
 
 
-export const { addToCart } = cartSlice.actions;
+// export const { addToCart } = cartSlice.actions;
 export default cartSlice.reducer;

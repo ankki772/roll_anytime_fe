@@ -1,30 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import SliderCommon from '../Components/common/slideImg';
 import { getProductDetails } from '../Api/Services/products';
 import SelectPackage from '../Components/mobile/selectPackage';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addDataTocart } from '../Redux/Slices/cartSlices';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Button from '@mui/material/Button';
+import {toastError, toastInfo, toastSuccess } from '../helpers/toastHelper';
+import { getUsercartData } from '../Api/Services/user';
+
 
 export default function Productdetail() {
 
   let dispatch = useDispatch();
-  const packs = [
-    '1 Day',
-    '2 Days',
-    '1 Week',
-  ];
-  let priceArr = [{ pack: '1 Day', price: 200 }, { pack: '2 Days', price: 300 }, { pack: '1 week', price: 1000 }]
+  const navigate = useNavigate();
+  const cart = useSelector((state) => state.cart)
+  // console.log("first,", cart)//data from the redux store
+
   const { product_id } = useParams();
   // console.log("product id ", product_id)
   const [rentPrice, setRentPrice] = useState('')
   const [selectedPack, setSelectedPack] = useState({})
+  const [productStatus, setProductStatus] = useState(false)
+  const [goCartButton, setGoCartButton] = useState(false)
+  const [packArr, setPackArr] = useState([])
   const [productDetail, setProductDetail] = useState({})
   const onChangePack = (item) => {
     setRentPrice(item)
-    priceArr.forEach(element => {
+    packArr.forEach(element => {
       if (element.price == item) {
-        // console.log("first",element)
         setSelectedPack(element)
       }
     });
@@ -33,23 +38,55 @@ export default function Productdetail() {
 
   useEffect(() => {
     ; (async () => {
+      let cartResult = await getUsercartData();
+      checkFilter(product_id,cartResult)
       let result = await getProductDetails(product_id);
       if (result?.result.length) {
         setProductDetail(result?.result[0])
+        setSelectedPack(JSON.parse(result?.result[0]?.product_pack[0])[0])
+        setPackArr(JSON.parse(result?.result[0]?.product_pack[0]))
+        // console.log("product pack", JSON.parse(result?.result[0]?.product_pack[0]))
+        setRentPrice(JSON.parse(result?.result[0]?.product_pack[0])[0]?.price)
       }
     })()
-    setRentPrice(priceArr[0]?.price)
-
-
   }, [])
+
+  useEffect(() => {
+    if (cart.status == 'succeeded') {
+      toastSuccess("Item Successfully Added to the cart");
+      setGoCartButton(true);
+    }
+    else if(cart.status == 'failed'){
+      toastError("Item is Not Added due to some error")
+    }
+  }, [cart])
+
+  function checkFilter(keyword,array){
+    array.forEach(element => {
+      if (element.product_id==keyword) {
+        toastInfo("Product Is Already added in the cart Please Go to the Cart")
+        setProductStatus(true)
+        setGoCartButton(true)
+      }
+      else{
+        setProductStatus(false)
+        setGoCartButton(false)
+      }
+    });
+  }
+
 
   const handleAddtoCart = (item) => {
     let bodyData = {
-      product_id:item?.product_id,
-      product_pack:selectedPack
+      product_id: item?.product_id,
+      product_pack: selectedPack
     }
-    console.log("hjdhsfbdj", rentPrice,selectedPack)
+    console.log("hjdhsfbdj", rentPrice, selectedPack)
     dispatch(addDataTocart(bodyData))
+  }
+
+  const goCartHandler = () => {
+    navigate('/cart')
   }
 
   return (
@@ -71,7 +108,7 @@ export default function Productdetail() {
               <h2>About this item: </h2>
               <p>{productDetail?.product_description}</p>
               <ul>
-                <li>Select Packs: <SelectPackage packs={priceArr} onChangePack={onChangePack} /></li>
+                <li>Select Packs: <SelectPackage packs={packArr} onChangePack={onChangePack} /></li>
 
               </ul>
             </div>
@@ -81,9 +118,13 @@ export default function Productdetail() {
             </div>
 
             <div className="purchase-info">
-              <button type="button" className="btn" onClick={() => handleAddtoCart(productDetail)}>
-                Add to Cart <i className="fas fa-shopping-cart"></i>
-              </button>
+              <Button variant="contained" disabled={goCartButton} style={{ background: 'green' }} endIcon={<ShoppingCartIcon />} onClick={() => handleAddtoCart(productDetail)}>
+                Add to Cart
+              </Button>
+              {goCartButton ? <Button variant="contained" style={{ background: 'blue' }} onClick={goCartHandler}>
+                Go to Cart
+              </Button> : null}
+
             </div>
 
           </div>
@@ -221,6 +262,8 @@ img{
 }
 .purchase-info{
     margin: 1.5rem 0;
+    display:flex;
+    gap:5px;
 }
 .purchase-info input,
 .purchase-info .btn{

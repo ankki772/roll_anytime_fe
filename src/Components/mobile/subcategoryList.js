@@ -7,20 +7,36 @@ import SelectPackage from "./selectPackage";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Button } from "@mui/material";
 import LongMenu from "./menuDrop";
+import { useSelector } from "react-redux";
+import { toastError, toastSuccess } from "../../helpers/toastHelper";
 
 export default function SUbcategoryList({ categoryName }) {
   const [categoryList, setCategoryList] = useState([])
+  const [packArr, setPackArr] = useState([])
+  const cart = useSelector((state) => state.cart)
+
+
 
   useEffect(() => {
     ; (async () => {
       let result = await getProductByCategory(categoryName);
       if (result?.result.length) {
         setCategoryList(result?.result)
+        setPackArr(JSON.parse(result?.result[0]?.product_pack[0]))
       }
     })()
   }, [categoryName])
 
-  let priceArr = [{ pack: '1 Day', price: 200 }, { pack: '2 Days', price: 300 }, { pack: '1 week', price: 1000 }]
+  useEffect(() => {
+    if (cart.status == 'succeeded') {
+      toastSuccess("Item Successfully Added to the cart");
+      // setGoCartButton(true);
+    }
+    else if(cart.status == 'failed'){
+      toastError("Item is Not Added due to some error")
+    }
+  }, [cart])
+
   return (
     <>
       <div className="subcat-container">
@@ -43,7 +59,7 @@ export default function SUbcategoryList({ categoryName }) {
                 </span>
                 <span>{item?.product_name?.split(' ').splice(0, 2).join(' ')}</span>
                 <span>{item?.pricing}</span>
-                <span><LongMenu viewProduct={`/product/${item?.product_id}`} packs={priceArr} /></span>
+                <span><LongMenu viewProduct={`/product/${item?.product_id}`} packs={packArr} product_id={item?.product_id}/></span>
                 </li>
           ))}
           {categoryList.length > 3 ?

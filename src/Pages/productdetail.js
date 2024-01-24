@@ -3,22 +3,33 @@ import { useParams } from 'react-router-dom'
 import SliderCommon from '../Components/common/slideImg';
 import { getProductDetails } from '../Api/Services/products';
 import SelectPackage from '../Components/mobile/selectPackage';
+import { useDispatch } from 'react-redux';
+import { addDataTocart } from '../Redux/Slices/cartSlices';
 
 export default function Productdetail() {
+
+  let dispatch = useDispatch();
   const packs = [
     '1 Day',
     '2 Days',
-    '1 Week',    
+    '1 Week',
   ];
-  let priceArr = [{pack:'1 Day',price:200},{pack:'2 Days',price:300},{pack:'1 week',price:1000}]
+  let priceArr = [{ pack: '1 Day', price: 200 }, { pack: '2 Days', price: 300 }, { pack: '1 week', price: 1000 }]
   const { product_id } = useParams();
-  console.log("product id ", product_id)
+  // console.log("product id ", product_id)
   const [rentPrice, setRentPrice] = useState('')
+  const [selectedPack, setSelectedPack] = useState({})
   const [productDetail, setProductDetail] = useState({})
-   const onChangePack = (item)=>{
+  const onChangePack = (item) => {
     setRentPrice(item)
+    priceArr.forEach(element => {
+      if (element.price == item) {
+        // console.log("first",element)
+        setSelectedPack(element)
+      }
+    });
 
-   }
+  }
 
   useEffect(() => {
     ; (async () => {
@@ -31,6 +42,15 @@ export default function Productdetail() {
 
 
   }, [])
+
+  const handleAddtoCart = (item) => {
+    let bodyData = {
+      product_id:item?.product_id,
+      product_pack:selectedPack
+    }
+    console.log("hjdhsfbdj", rentPrice,selectedPack)
+    dispatch(addDataTocart(bodyData))
+  }
 
   return (
     <>
@@ -51,7 +71,7 @@ export default function Productdetail() {
               <h2>About this item: </h2>
               <p>{productDetail?.product_description}</p>
               <ul>
-                <li>Select Packs: <SelectPackage packs={priceArr} onChangePack = {onChangePack}/></li>
+                <li>Select Packs: <SelectPackage packs={priceArr} onChangePack={onChangePack} /></li>
 
               </ul>
             </div>
@@ -61,7 +81,7 @@ export default function Productdetail() {
             </div>
 
             <div className="purchase-info">
-              <button type="button" className="btn">
+              <button type="button" className="btn" onClick={() => handleAddtoCart(productDetail)}>
                 Add to Cart <i className="fas fa-shopping-cart"></i>
               </button>
             </div>
@@ -69,7 +89,7 @@ export default function Productdetail() {
           </div>
         </div>
       </div>
-      <style jsx>
+      <style jsx='true'>
         {
           `
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');

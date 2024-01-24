@@ -1,22 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getUserDetail } from "../Api/Services/user";
 
 export default function Cart() {
+  const cart = useSelector((state) => state.cart)
+  const [userCartData, setUserCartData] = useState({})
+  console.log("first,",cart)
+  useEffect(() => {
+    ;(async()=>{
+
+      const userData = await getUserDetail();
+      console.log("userdetails",userData);
+      setUserCartData(userData[0].cart_items)
+    })()
+  }, [])
+  
   return (
     <>
       <div className="cart-wrapper">
         <section className="cart-items-wrapper">
           <ul>
-            <li>
+            {userCartData && !!userCartData.length && userCartData.map((item,id)=>{
+
+            return <li key={item?._id}>
               <div class="product">
                 <img
-                  src="https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w="
+                  src={item?.product_imges[0]}
                   alt=""
                 />
                 <div className="product-info">
-                  <p>Antique Clock from ancient</p>
+                  <p>{item?.product_name}</p>
                   <div className="product-price">
                     <p>
-                      <strong>Rs. 74.99</strong>{" "}
+                      <strong>Rs. {item?.product_pack[0]?.price||''}</strong>{" "}
                     </p>
                   </div>
 
@@ -26,46 +42,7 @@ export default function Cart() {
                 </div>
               </div>
             </li>
-            <li>
-              <div class="product">
-                <img
-                  src="https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w="
-                  alt=""
-                />
-                <div className="product-info">
-                  <p>Antique Clock from ancient</p>
-                  <div className="product-price">
-                    <p>
-                      <strong>Rs. 74.99</strong>{" "}
-                    </p>
-                  </div>
-
-                  <div className="product-removal">
-                    <button className="remove-product">Remove</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="product">
-                <img
-                  src="https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w="
-                  alt=""
-                />
-                <div className="product-info">
-                  <p>Antique Clock from ancient</p>
-                  <div className="product-price">
-                    <p>
-                      <strong>Rs. 74.99</strong>{" "}
-                    </p>
-                  </div>
-
-                  <div className="product-removal">
-                    <button className="remove-product">Remove</button>
-                  </div>
-                </div>
-              </div>
-            </li>
+            })}
           </ul>
         </section>
         <section className="total-wrapper">

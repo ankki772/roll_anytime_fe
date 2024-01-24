@@ -3,8 +3,8 @@ import Cookies from "js-cookie";
 const setCookies = (...restcookies) => {
   console.log("resttt",restcookies)
   restcookies.forEach((cookie) => {
-    if (cookie.length == 1) return;
-    cookie.length == 2
+    if (cookie.length === 1) return;
+    cookie.length === 2
       ? Cookies.set(cookie[0], cookie[1])
       : Cookies.set(cookie[0], cookie[1], cookie[2]);
   });

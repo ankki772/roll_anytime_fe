@@ -34,11 +34,20 @@ export const  getUserDetail= async ()=>{
 try{
 
   let response = await client.get('/user/getUser',{authorization:true})
-  console.log("responseeeeeeeeee",response)
-  return response
+  return response.data
 }
 catch(err){
   console.log("pp",err)
   return "Error"
 }
+}
+export const addProductToCart = async  (data) =>{
+  try{
+      let response = await client.post(`user/addProducttoCart`,data,{authorization:true});       
+      return response ;
+  }
+  catch(err){
+      return [];
+  }
+
 }

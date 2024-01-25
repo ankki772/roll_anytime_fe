@@ -4,18 +4,18 @@ import SliderCommon from '../Components/common/slideImg';
 import { getProductDetails } from '../Api/Services/products';
 import SelectPackage from '../Components/mobile/selectPackage';
 import { useDispatch, useSelector } from 'react-redux';
-import { addDataTocart } from '../Redux/Slices/cartSlices';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Button from '@mui/material/Button';
 import {toastError, toastInfo, toastSuccess } from '../helpers/toastHelper';
 import { getUsercartData } from '../Api/Services/user';
+import { addDataTocart } from '../Redux/action';
 
 
 export default function Productdetail() {
 
   let dispatch = useDispatch();
   const navigate = useNavigate();
-  const cart = useSelector((state) => state.cart)
+  const cart = useSelector((state) => state.addcart)
   // console.log("first,", cart)//data from the redux store
 
   const { product_id } = useParams();

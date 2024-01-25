@@ -69,7 +69,7 @@ function Prdlist() {
                             {`${product?.product_description.substring(0, 70)}${product?.product_description.length > 70 ? '...' : null}`}
                           </div>
                           <div className="sc-eqGige dKRZxZ">
-                            <span style={{ color: 'black' }}>Price : </span>   Rs. {product?.pricing}
+                            {/* <span style={{ color: 'black' }}>Price : </span>   Rs. {product?.pricing} */}
                           </div>
 
                         </div>

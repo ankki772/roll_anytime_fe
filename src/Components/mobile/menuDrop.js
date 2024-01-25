@@ -10,68 +10,66 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { getUsercartData } from '../../Api/Services/user';
-import { addDataTocart } from '../../Redux/Slices/cartSlices';
 import { useDispatch, useSelector } from 'react-redux';
+import { addDataTocart } from '../../Redux/action';
 
 
 
 const ITEM_HEIGHT = 48;
 
-export default function LongMenu({ viewProduct, packs,product_id }) {
+export default function LongMenu({ viewProduct, packs, product_id }) {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [options, setOptions] = React.useState(['Add Product',
-    'View Product'])
+    const [options, setOptions] = React.useState(['Add Product', 'View Product'])
     const [packPrice, setPackPrice] = React.useState([packs[0]?.price])
     const [selectedPack, setSelectedPack] = React.useState(packs[0])
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const cart = useSelector((state) => state.cart)
+    const cart = useSelector((state) => state.addcart)
+    // console.log("first,cart",cart)
     // let options = [
     //     'Add Product',
     //     'View Product'
     // ];
 
     React.useEffect(() => {
-        console.log("dksncjnlskmd",packs)
-      setSelectedPack(packs[0])
+        setSelectedPack(packs[0])
     }, [packs])
-    
+
 
 
     React.useEffect(() => {
-       ; (async()=>{
+        ; (async () => {
+            // console.log("menu drop is rendering")
             let cartResult = await getUsercartData();
-            checkFilter(product_id,cartResult)
+            checkFilter(product_id, cartResult)
 
         })()
-    }, [cart.status,packs])
+    }, [cart.status, packs])
 
-    function checkFilter(keyword,array){
-        console.log("filteringgggggg",keyword,array)
-        array.forEach(element => {
-          if (element.product_id==keyword) {
-            setOptions(["Go To Cart",'View Product'])
-            // options.shift()
-            // options.unshift("Go To Cart")
-          }
-          else{
-            setOptions(['Add Product','View Product'])
+    function checkFilter(keyword, array) {
+        // console.log("filteringgggggg", keyword, array)
+        let filterArr = array.filter((element) => {
+            return element.product_id == keyword;
+        })
+        if (filterArr.length) {
+            setOptions(["Go To Cart", 'View Product'])
+        }
+        else {
+            setOptions(['Add Product', 'View Product'])
+        }
+    }
 
-          }
-        });
-      }
-    
 
     const onChangePack = (price) => {
         setPackPrice(price)
         packs.forEach(element => {
             if (element.price == price) {
-              setSelectedPack(element)
+                setSelectedPack(element)
             }
-          });
+        });
     }
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -87,15 +85,15 @@ export default function LongMenu({ viewProduct, packs,product_id }) {
         else if (content == 'Add Product') {
             openDialog();
         }
-        else if(content == 'Go To Cart'){
+        else if (content == 'Go To Cart') {
             navigate('/cart')
         }
         setAnchorEl(null);
     };
     const addProductHandler = () => {
-        let bodyData={
+        let bodyData = {
             product_id,
-            product_pack:selectedPack
+            product_pack: selectedPack
         }
         // console.log("dbjsbfk",bodyData)
         dispatch(addDataTocart(bodyData))
@@ -132,7 +130,7 @@ export default function LongMenu({ viewProduct, packs,product_id }) {
             >
                 {options.map((option) => (
                     <MenuItem style={{ background: 'transparent' }} key={option} selected={option === 'Pyxis'} onClick={(e) => handleClose(option)}>
-                        <Button style={{color:'black'}} startIcon={option == 'Add Product'?< AddIcon/>:option == 'Go To Cart'?<ShoppingCartIcon/>:<RemoveRedEyeIcon/>}>
+                        <Button style={{ color: 'black' }} startIcon={option == 'Add Product' ? < AddIcon /> : option == 'Go To Cart' ? <ShoppingCartIcon /> : <RemoveRedEyeIcon />}>
                             {option}
                         </Button>
                     </MenuItem>

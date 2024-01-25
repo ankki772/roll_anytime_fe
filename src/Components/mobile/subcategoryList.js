@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { dummysubcatlist } from "../../dummyprd";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { getProductByCategory } from "../../Api/Services/products";
-import SelectPackage from "./selectPackage";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Button } from "@mui/material";
 import LongMenu from "./menuDrop";
 import { useSelector } from "react-redux";
 import { toastError, toastSuccess } from "../../helpers/toastHelper";
@@ -13,7 +9,7 @@ import { toastError, toastSuccess } from "../../helpers/toastHelper";
 export default function SUbcategoryList({ categoryName }) {
   const [categoryList, setCategoryList] = useState([])
   const [packArr, setPackArr] = useState([])
-  const cart = useSelector((state) => state.cart)
+  const cart = useSelector((state) => state.addcart)
 
 
 
@@ -30,12 +26,11 @@ export default function SUbcategoryList({ categoryName }) {
   useEffect(() => {
     if (cart.status == 'succeeded') {
       toastSuccess("Item Successfully Added to the cart");
-      // setGoCartButton(true);
     }
     else if(cart.status == 'failed'){
       toastError("Item is Not Added due to some error")
     }
-  }, [cart])
+  }, [cart.status])
 
   return (
     <>

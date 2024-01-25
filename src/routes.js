@@ -46,7 +46,7 @@ export const routes = [
       },
       {
         path:"cart",
-        element:<Cart/>
+        element:<ProtectedRoute><Cart/></ProtectedRoute>
       },
       {
         path:"listing",

@@ -1,96 +1,105 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@mui/material";
-import {loadStripe} from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { getUserDetail, getUsercartData } from "../Api/Services/user";
 import { totalsumCartPrice } from "../helpers/helper";
-import { removeDatafromCart } from "../Redux/Slices/cartSlices";
+import { toastError, toastInfo, toastSuccess } from '../helpers/toastHelper';
+import { removeDatafromCart } from "../Redux/action";
 
 export default function Cart() {
   let dispatch = useDispatch();
 
-  const cart = useSelector((state) => state.cart)
-  console.log("first,",cart)
+  const cart = useSelector((state) => state.removecart)
+  // console.log("first,", cart)
   const [userCartData, setUserCartData] = useState([])
   const [cartPrice, setCartPrice] = useState(0)
   useEffect(() => {
-    ;(async()=>{
+    ; (async () => {
 
       const userData = await getUsercartData();
-      console.log("userdetails",userData);
+      // console.log("userdetails", userData);
       setUserCartData(userData)
       setCartPrice(totalsumCartPrice(userData))
     })()
-  }, [cart.status])
+    if (cart.status == 'succeeded') {
+      toastSuccess("Item Successfully removed from the cart");
+    }
+    else if (cart.status == 'failed') {
+      toastError("Item is Not removed due to some error")
+    }
+  }, [cart])
+
   let carts = [{
-    productId:"bkjbjsn",
-    productName:"Tshirt",
-    quantity:2,
-    price:100
+    productId: "bkjbjsn",
+    productName: "Tshirt",
+    quantity: 2,
+    price: 100
   }]
 
-  const makePayment = async()=>{
+  const makePayment = async () => {
     const stripe = await loadStripe('pk_test_51OZvJBSGaKsXrSjrOGSV2Nf77fT8XTECnkJBvzF8nzfiJTQsHi3dFE8ZfdpshF5ZWPAxGn6WAmnXjAb29qNFK3Gi001tdFMBLi');
 
     const body = {
-        products:carts
+      products: carts
     }
     const headers = {
-        "Content-Type":"application/json"
+      "Content-Type": "application/json"
     }
-    const response = await fetch("https://d39e-2405-201-402e-a058-a031-5b71-ab64-e44c.ngrok-free.app/api/RA/product/create_payment",{
-        method:"POST",
-        headers:headers,
-        body:JSON.stringify(body)
+    const response = await fetch("https://d39e-2405-201-402e-a058-a031-5b71-ab64-e44c.ngrok-free.app/api/RA/product/create_payment", {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body)
     });
 
     const session = await response.json();
 
     const result = stripe.redirectToCheckout({
-        sessionId:session.id
+      sessionId: session.id
     });
-    
-    if(result.error){
-        console.log(result.error);
-    }
-}
 
-const removeHandler = (product_id)=>{
-  console.log("productId",product_id)
-  dispatch(removeDatafromCart({product_id}))
-}
-  
+    if (result.error) {
+      console.log(result.error);
+    }
+  }
+
+  const removeHandler = (product_id) => {
+    // console.log("productId", product_id)
+    dispatch(removeDatafromCart({ product_id }))
+  }
+
   return (
     <>
       <div className="cart-wrapper">
         <section className="cart-items-wrapper">
           <ul>
-            {userCartData && !!userCartData.length && userCartData.map((item,id)=>{
+            {userCartData && !!userCartData.length ? userCartData.map((item, id) => {
 
-            return <li key={item?._id}>
-              <div className="product">
-                <img
-                  src={item?.product_imges[0]}
-                  alt=""
-                />
-                <div className="product-info">
-                  <p>{item?.product_name}</p>
-                  <div className="product-price">
-                    <p>
-                      <strong>Rs. {item?.product_pack[0]?.price||''}</strong>{" "}
-                    </p>
-                  </div>
+              return <li key={item?._id}>
+                <div className="product">
+                  <img
+                    src={item?.product_imges[0]}
+                    alt=""
+                  />
+                  <div className="product-info">
+                    <p>{item?.product_name}</p>
+                    <div className="product-price">
+                      <p>
+                        <strong>Rs. {item?.product_pack[0]?.price || ''}</strong>{" "}
+                      </p>
+                    </div>
 
-                  <div className="product-removal">
-                    <button className="remove-product" onClick={()=>removeHandler(item?.product_id)}>Remove</button>
+                    <div className="product-removal">
+                      <button className="remove-product" onClick={() => removeHandler(item?.product_id)}>Remove</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-            })}
+              </li>
+            }) :
+              <div>Pls add some product to the cart</div>}
           </ul>
         </section>
-        <section className="total-wrapper">
+        {userCartData && !!userCartData.length && <section className="total-wrapper">
           <div className="total-title">Price Details</div>
           <div className="total-detail">
             <div className="total-price">
@@ -103,14 +112,14 @@ const removeHandler = (product_id)=>{
             </div> */}
           </div>
           <div className="total-amount">
-              <span>Total Amount</span>
-              <span>Rs. {cartPrice}</span>
-            </div>
+            <span>Total Amount</span>
+            <span>Rs. {cartPrice}</span>
+          </div>
           <div className="total-amount">
-              <span></span>
-              <span><Button style={{background:'red',color:'white'}} onClick={makePayment}>Proceed</Button></span>
-            </div>
-        </section>
+            <span></span>
+            <span><Button style={{ background: 'red', color: 'white' }} onClick={makePayment}>Proceed</Button></span>
+          </div>
+        </section>}
       </div>
 
       <style jsx>

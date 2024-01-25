@@ -9,7 +9,6 @@ import { capitalizeFirstLetter } from "../../helpers/helper";
 
 
 export default function FeaturedItems({ categoryList }) {
-  console.log("first,",categoryList)
   const [categoryName, setCategoryName] = useState(categoryList[0]?.category_name)
 
   useEffect(() => {

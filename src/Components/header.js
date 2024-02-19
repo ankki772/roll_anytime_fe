@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../Contexts/globalContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { isMobile } from "react-device-detect";
 import roll_anytime from "../Assets/Images/roll_anytime.png";
 import { getCookies, removeCookies } from "../helpers/cookiehelper";
 import Cookies from "js-cookie";
@@ -25,11 +26,11 @@ export default function Header() {
     }
 
   }
- 
 
-  const logoutHandler=()=>{
+
+  const logoutHandler = () => {
     console.log("loggeoutclicked")
-    removeCookies('logged_in','role','token')
+    removeCookies('logged_in', 'role', 'token')
     // Cookies.remove('logged_in')
     // Cookies.remove('role')
     // navigate('/')
@@ -40,10 +41,10 @@ export default function Header() {
       <header className="header">
         <nav>
           <div className="nav_left" onClick={(e) => closeMenu(e)}>
-            <input type="checkbox" id="menu-toggle" checked={checkedMenu} />
-            <label htmlFor="menu-toggle" className="menu-icon">
-              &#9776;
-            </label>
+            {isMobile ? <><input type="checkbox" id="menu-toggle" checked={checkedMenu} />
+              <label htmlFor="menu-toggle" className="menu-icon">
+                &#9776;
+              </label></> : null}
 
             <div className="logo">
               <a href="">
@@ -62,18 +63,18 @@ export default function Header() {
                 {id === 4 && !logged_in ?
                   <li key={`${id}${'login'}`}>
                     <Link to={'/login'}>Login</Link>
-                  </li> 
+                  </li>
                   : null}
-                 {( id === menus.length-1 && role === 'Admin')?
+                {(id === menus.length - 1 && role === 'Admin') ?
                   <li key={`${id}${'admin'}`}>
                     <Link to={'/addProduct'}>Admin Panel</Link>
                   </li>
                   : null}
-                  <li key={`${id}${menuItem.slug}`}>
-                    <Link to={menuItem?.slug!='Logout' ? menuItem.url :null} onClick={menuItem?.slug=='Logout'?()=>logoutHandler():null }>{menuItem.slug}</Link>
-                  </li>
-                  
-                
+                <li key={`${id}${menuItem.slug}`}>
+                  <Link to={menuItem?.slug != 'Logout' ? menuItem.url : null} onClick={menuItem?.slug == 'Logout' ? () => logoutHandler() : null}>{menuItem.slug}</Link>
+                </li>
+
+
               </>)
               }
             </ul>

@@ -18,7 +18,7 @@ export default function Cart() {
     ; (async () => {
 
       const userData = await getUsercartData();
-      // console.log("userdetails", userData);
+      console.log("userdetails", userData);
       setUserCartData(userData)
       setCartPrice(totalsumCartPrice(userData))
     })()
@@ -46,7 +46,7 @@ export default function Cart() {
     const headers = {
       "Content-Type": "application/json"
     }
-    const response = await fetch("https://d39e-2405-201-402e-a058-a031-5b71-ab64-e44c.ngrok-free.app/api/RA/product/create_payment", {
+    const response = await fetch(`https://rollanytime.onrender.com/api/RA/product/create_payment`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify(body)

@@ -23,9 +23,9 @@ export default function SlideImg({topSliderCategory,detail=false}) {
                         <div className='container-container container-aspectContainer'>
                             <div className=' row-base'>
                                 <div className=' column-base'>
-                                    <Link to='/product/id'>
+                                    {/* <Link to='/product/id'> */}
                                            <img className='image-image image-hand' src={detail ? item : item.img_url} alt=''/>
-                                    </Link>
+                                    {/* </Link> */}
                                 </div>
                             </div>
 

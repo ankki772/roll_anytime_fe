@@ -42,8 +42,9 @@ export default function SUbcategoryList({ categoryName }) {
           <h2>Action</h2>
         </div>
         <ul className="subcat-item-list">
-          {categoryList.slice(0, 3).map((item, idx) => (
+          {categoryList.map((item, idx) => (
               <li className="subcat-item" key={`${idx}_scl`}>
+                <Link to={`/product/${item?.product_id}`}>
                 <span>
                   <LazyLoadImage
                     src={item?.product_imges[0]}
@@ -52,17 +53,18 @@ export default function SUbcategoryList({ categoryName }) {
                     effect="blur"
                   />
                 </span>
+                </Link>
                 <span>{item?.product_name?.split(' ').splice(0, 2).join(' ')}</span>
                 <span>{item?.pricing}</span>
                 <span><LongMenu viewProduct={`/product/${item?.product_id}`} packs={packArr} product_id={item?.product_id}/></span>
                 </li>
           ))}
-          {categoryList.length > 3 ?
+          {/* {categoryList.length > 3 ?
             <Link to={`categories/${categoryName}`}>
 
               View all
 
-            </Link> : null}
+            </Link> : null} */}
         </ul>
       </div>
       <style jsx>{`
@@ -88,10 +90,10 @@ export default function SUbcategoryList({ categoryName }) {
           color: #5c6158e0;
         }
         .subcat-item-list {
-          list-style: none;
-          display: flex;
-          flex-direction: column;
-          padding: 5px 0;
+          overflow-y: scroll;
+          display: block;
+          max-height: 250px;
+      
         }
         .subcat-item-list .subcat-item {
           display: flex;

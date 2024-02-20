@@ -5,7 +5,6 @@ import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import SUbcategoryList from "../mobile/subcategoryList";
-import ProductTable from "../mobile/productTable";
 import { capitalizeFirstLetter } from "../../helpers/helper";
 
 
@@ -138,7 +137,6 @@ export default function FeaturedItems({ categoryList }) {
             ))}
           </Slider>
         </div>
-        {/* {isMobile ? <ProductTable /> : null} */}
         {isMobile ? <SUbcategoryList categoryName={categoryName} /> : null}
       </div>
 

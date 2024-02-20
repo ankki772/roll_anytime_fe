@@ -6,6 +6,7 @@ import { getUserDetail, getUsercartData } from "../Api/Services/user";
 import { totalsumCartPrice } from "../helpers/helper";
 import { toastError, toastInfo, toastSuccess } from '../helpers/toastHelper';
 import { removeDatafromCart } from "../Redux/action";
+import { apiUrl } from "../site.config";
 
 export default function Cart() {
   let dispatch = useDispatch();
@@ -30,23 +31,17 @@ export default function Cart() {
     }
   }, [cart])
 
-  let carts = [{
-    productId: "bkjbjsn",
-    productName: "Tshirt",
-    quantity: 2,
-    price: 100
-  }]
 
   const makePayment = async () => {
     const stripe = await loadStripe('pk_test_51OZvJBSGaKsXrSjrOGSV2Nf77fT8XTECnkJBvzF8nzfiJTQsHi3dFE8ZfdpshF5ZWPAxGn6WAmnXjAb29qNFK3Gi001tdFMBLi');
 
     const body = {
-      products: carts
+      products: userCartData
     }
     const headers = {
       "Content-Type": "application/json"
     }
-    const response = await fetch(`https://rollanytime.onrender.com/api/RA/product/create_payment`, {
+    const response = await fetch(`${apiUrl}product/create_payment`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify(body)

@@ -1,12 +1,11 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { setCookies,getCookies } from '../helpers/cookiehelper';
+import { apiUrl } from '../site.config';
 
 export const client  = axios.create({
 	// Configuration
-	// baseURL: 'https://2a3c-49-47-69-133.ngrok-free.app/api/RA/',
-	baseURL: 'https://rollanytime.onrender.com/api/RA/',
-	// baseURL: ' localhost:8000/api/RA/',
+	baseURL: apiUrl,
 
 	// timeout: 12000,
 	headers: {

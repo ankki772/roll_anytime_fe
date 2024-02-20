@@ -77,9 +77,5 @@ export const routes = [
   {
     path:"/admin",
     element:   <Admin/>
-  },
-  // {
-  //   path: "/addProduct",
-  //   element: <ProtectedRoute><AddProduct/></ProtectedRoute>,
-  // },
+  }
 ];

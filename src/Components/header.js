@@ -15,7 +15,7 @@ export default function Header() {
 
   let menus = [{ url: '/', slug: "Home" }, { url: '/account', slug: "Profile" }, { url: "/listing", slug: "Product List" }, { url: "/", slug: "Contact-Us" }, { url: "/", slug: "Logout" }]
   const closeMenu = (e) => {
-    let checkedMen = document.getElementById("menu-toggle").checked
+    let checkedMen = document.getElementById("menu-toggle") && document.getElementById("menu-toggle").checked
     if (checkedMen) {
       setCheckedMenu(false)
       document.querySelector(".menu").style.transform = "scale(1, 0)"

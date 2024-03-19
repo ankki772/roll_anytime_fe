@@ -5,9 +5,12 @@ import { signInUser } from "../Api/Services/user";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../Contexts/userContext";
 import { setCookies } from "../helpers/cookiehelper";
+import { useDispatch } from "react-redux";
+import { fetchCartData } from "../Redux/action";
 
 export default function SignIn() {
   const navigate = useNavigate()
+  let dispatch = useDispatch();
   const {setAuth} = useContext(UserContext);
   const [values, setValues] = useState({
     emailphone: "",
@@ -26,7 +29,6 @@ function validatePhoneNumber(input_str) {
   const onSubmit= async (e)=>{
 
     let countryCode = "+91";
-    console.log("========",values)
 
     if(validatePhoneNumber(values.emailphone)){
       values.emailphone = `${countryCode}${values.emailphone}`
@@ -37,6 +39,7 @@ function validatePhoneNumber(input_str) {
     if(response?.token){
       setAuth(true)
       console.log("naviagteion")
+      dispatch(fetchCartData())
       navigate('/');
     }
     else{

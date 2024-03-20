@@ -13,9 +13,13 @@ export default function Layout() {
   const [users, setUsers] = useState(["ankit","yadav"]);
   let dispatch = useDispatch();
   const location = useLocation();
+  let { logged_in } = getCookies("logged_in");
+
 
   useEffect(() => {
-    dispatch(fetchCartData())
+    if (logged_in == 'true') {
+      dispatch(fetchCartData())      
+    }
   }, []);
   return (
     <>

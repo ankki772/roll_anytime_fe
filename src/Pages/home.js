@@ -35,13 +35,23 @@ export default function Home() {
 
   return (
     <>
-      {/* <PopularItems/> */}
+      <div className='homeContainer'>
       <TopSlider/>
       <FeaturedCategory categoryList={categoryList}/>
-      {/* <FeaturedCategory /> */}
       <FeaturedItems populatItem = {populatItems}/>
-      {/* <FeaturedItems/> */}
       <About/>
+      </div>
+      <style jsx='true'>{`
+      @media screen and (max-width: 768px) {
+        .homeContainer {
+          position:relative;
+          width: 95%;
+          margin: 15px auto;
+          top: 75px;
+          margin-bottom: 140px;
+        }
+      }
+      `}</style>
     </>
 
   )

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../Contexts/globalContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -6,11 +6,37 @@ import { isMobile } from "react-device-detect";
 import roll_anytime from "../Assets/Images/roll_anytime.png";
 import { getCookies, removeCookies } from "../helpers/cookiehelper";
 import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
 export default function Header() {
+
+  const ref = useRef()
   const [checkedMenu, setCheckedMenu] = useState(false)
-  // let navigate = useNavigate();
+  const userData = useSelector((state)=>state.addcart.data);
+  const [cartData, setcartData] = useState(userData.length||0)
+
+  useEffect(() => {
+    setcartData(userData.length)
+  }, [userData])
+
   let { logged_in } = getCookies("logged_in");
   let role = Cookies.get('role')
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        let checkedMen = document.getElementById("menu-toggle") && document.getElementById("menu-toggle").checked
+        if (checkedMen) {
+          setCheckedMenu(false)
+          document.querySelector(".menu").style.transform = "scale(1, 0)"
+        }
+      }
+    };  
+    document.addEventListener('mousedown', handleOutsideClick);
+  
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
 
 
   let menus = [{ url: '/', slug: "Home" }, { url: '/account', slug: "Profile" }, { url: "/listing", slug: "Product List" }, { url: "/", slug: "Contact-Us" }, { url: "/", slug: "Logout" }]
@@ -40,14 +66,14 @@ export default function Header() {
     <>
       <header className="header">
         <nav>
-          <div className="nav_left" onClick={(e) => closeMenu(e)}>
+          <div className="nav_left" >
             {isMobile ? <><input type="checkbox" id="menu-toggle" checked={checkedMenu} />
-              <label htmlFor="menu-toggle" className="menu-icon">
+              <label htmlFor="menu-toggle" className="menu-icon" onClick={(e) => closeMenu(e)}>
                 &#9776;
               </label></> : null}
 
             <div className="logo">
-              <a href="">
+              <Link to={'/'}>
                 <LazyLoadImage
                   src={roll_anytime}
                   className="rollanytime_logo"
@@ -56,9 +82,9 @@ export default function Header() {
 
                 />
                 <span></span>
-              </a>
+              </Link>
             </div>
-            <ul className="menu" onClick={(e) => closeMenu(e)}>
+            <ul ref={ref} className="menu" onClick={(e) => closeMenu(e)}>
               {menus.map((menuItem, id) => <>
                 {id === 4 && !logged_in ?
                   <li key={`${id}${'login'}`}>
@@ -98,7 +124,7 @@ export default function Header() {
               </Link>
               <Link to='/cart'>
                 <span className="cart">
-                  <span className="badge">2</span>
+                  <span className="badge">{cartData}</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="26"
@@ -126,7 +152,7 @@ export default function Header() {
       }
       
       .header {
-        position: sticky;
+        position: fixed;
         top: 0;
         width: 100%;
         box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 6px -6px;
@@ -204,6 +230,9 @@ export default function Header() {
           transform-origin: top;
           transition: transform 0.3s ease-in-out;
           box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        }
+        .level2-header .menu {
+          position:absolute;
         }
       
         .menu a {

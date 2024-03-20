@@ -12,6 +12,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { getUsercartData } from '../../Api/Services/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { addDataTocart } from '../../Redux/action';
+import { toastError, toastSuccess } from '../../helpers/toastHelper';
 
 
 
@@ -95,8 +96,12 @@ export default function LongMenu({ viewProduct, packs, product_id }) {
             product_id,
             product_pack: selectedPack
         }
-        // console.log("dbjsbfk",bodyData)
-        dispatch(addDataTocart(bodyData))
+        try {
+            dispatch(addDataTocart(bodyData))
+            toastSuccess('Item added to cart!');
+          } catch (error) {
+            toastError(error.message); // Display error message if adding item fails
+          }
 
         setDialogOpen(!dialogOpen)
     }

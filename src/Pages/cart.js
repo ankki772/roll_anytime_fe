@@ -226,8 +226,11 @@ export default function Cart() {
           }
           @media screen and (max-width: 768px) {
             .cart-wrapper {
+              position:relative;
               width: 95%;
               margin: 15px auto;
+              top: 65px;
+              margin-bottom: 80px;
             }
             .cart-wrapper .cart-items-wrapper,
             .cart-wrapper .total-wrapper {

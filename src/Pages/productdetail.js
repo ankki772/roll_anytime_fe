@@ -51,15 +51,6 @@ export default function Productdetail() {
     })()
   }, [])
 
-  useEffect(() => {
-    if (cart.status == 'succeeded') {
-      toastSuccess("Item Successfully Added to the cart");
-      setGoCartButton(true);
-    }
-    else if(cart.status == 'failed'){
-      toastError("Item is Not Added due to some error")
-    }
-  }, [cart])
 
   function checkFilter(keyword,array){
     array.forEach(element => {
@@ -81,8 +72,13 @@ export default function Productdetail() {
       product_id: item?.product_id,
       product_pack: selectedPack
     }
-    console.log("hjdhsfbdj", rentPrice, selectedPack)
-    dispatch(addDataTocart(bodyData))
+    try {
+      dispatch(addDataTocart(bodyData))
+      toastSuccess('Item added to cart!');
+      setGoCartButton(true)
+    } catch (error) {
+      toastError(error.message); // Display error message if adding item fails
+    }
   }
 
   const goCartHandler = () => {
@@ -186,6 +182,15 @@ img{
     position: relative;
     color: #12263a;
     margin: 1rem 0;
+}
+@media screen and (max-width: 768px) {
+  .card-wrapper {
+    position:relative;
+    width: 95%;
+    margin: 15px auto;
+    top: 130px;
+    margin-bottom: 140px;
+  }
 }
 // .product-title::after{
 //     content: "";

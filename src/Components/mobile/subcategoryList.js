@@ -23,14 +23,7 @@ export default function SUbcategoryList({ categoryName }) {
     })()
   }, [categoryName])
 
-  useEffect(() => {
-    if (cart.status == 'succeeded') {
-      toastSuccess("Item Successfully Added to the cart");
-    }
-    else if(cart.status == 'failed'){
-      toastError("Item is Not Added due to some error")
-    }
-  }, [cart.status])
+
 
   return (
     <>

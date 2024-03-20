@@ -23,9 +23,9 @@ const Level2Header = ({ title }) => {
         color: #fff; /* Example text color */
         padding: 15px;
         position:fixed;
+        top: 75px;
         width:100vw;
-        z-index:1111;
-        border-bottom: 2px solid #0056b3; /* Example border color */
+        z-index:1;
       }
     `}</style>
     </>

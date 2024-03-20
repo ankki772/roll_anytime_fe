@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getProductDetails } from '../../Api/Services/products';
 import { addProductToCart, removeProductfromCart } from '../../Api/Services/user';
-import { addDataTocart, fetchCartData } from '../action';
+import { addDataTocart, fetchCartData, removeDatafromCart } from '../action';
 
 const initialState = {
   data: [],
@@ -38,7 +38,19 @@ const addcartSlice = createSlice({
       .addCase(fetchCartData.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
-      });
+      })
+      .addCase(removeDatafromCart.pending, (state) => {
+        state.status = 'loading';
+    })
+    .addCase(removeDatafromCart.fulfilled, (state, action) => {
+        // console.log("action from api", action)
+        state.status = 'succeeded';
+        state.data.push(action.payload.result.cart_items)
+    })
+    .addCase(removeDatafromCart.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+    });
   }
 });
 

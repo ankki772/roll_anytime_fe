@@ -18,6 +18,11 @@ export default function MproductListing() {
           #page-content {
             min-height: calc(100vh - 50px);
           }
+          .page {
+            position: relative;
+            top: 130px;
+            margin-bottom: 130px;
+          }
         `}
       </style>
     </>

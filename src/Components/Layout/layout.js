@@ -9,6 +9,7 @@ import BubbleComponent from "../bubbleComponent";
 import Level2Header from "../level2Header";
 import { useDispatch } from "react-redux";
 import { fetchCartData } from "../../Redux/action";
+import { getCookies } from "../../helpers/cookiehelper";
 export default function Layout() {
   const [users, setUsers] = useState(["ankit","yadav"]);
   let dispatch = useDispatch();

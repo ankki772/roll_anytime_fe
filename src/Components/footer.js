@@ -1,72 +1,77 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import XIcon from '@mui/icons-material/X';
 
 export default function Footer() {
   return (
     <>
       <footer>
-        <div class="row">
-          <div class="column">
+        <div className="row">
+          <div className="column">
             <h4>About Us</h4>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in
-              metus euismod, faucibus metus ut, semper nibh. Aenean euismod
-              justo eu enim dapibus suscipit.
+              Welcome to ROLLTM, the world's first full filmmaking production company revolutionizing the industry.
+              Our primary mission is to redefine the filmmaking process by eliminating unnecessary brokerage, allowing you to invest more in quality production.
+              With us, you can order your filmmaking essentials up to 2 hours before the shoot, ensuring everything arrives on time.
             </p>
           </div>
-          <div class="column">
+          <div className="column">
             <h4>Quick Links</h4>
             <ul>
               <li>
                 <Link href="#">
-                  <i class="fa fa-angle-right"></i> Subscription
+                  <i className="fa fa-angle-right"></i> Subscription
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <i class="fa fa-angle-right"></i> Contact us
+                  <i className="fa fa-angle-right"></i> Contact us
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <i class="fa fa-angle-right"></i> Bug report
+                  <i className="fa fa-angle-right"></i> Bug report
                 </Link>
               </li>
             </ul>
           </div>
-          <div class="column">
+          <div className="column">
             <h4>Connect with Us</h4>
 
-            <ul class="social-icons">
+            <ul className="social-icons">
               <li>
                 <Link href="#">
-                  <i class="fa-brands fa-facebook-f"></i>
+                  <FacebookOutlinedIcon/>
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <i class="fa-brands fa-instagram"></i>
+                  <InstagramIcon/>
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <i class="fa-brands fa-twitter"></i>
+                  <YouTubeIcon/>
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <i class="fa-brands fa-github"></i>
+                  <XIcon/>
                 </Link>
               </li>
             </ul>
           </div>
         </div>
-        <p class="copyright">© 2023 All Rights Reserved</p>
+        <p className="copyright">© 2023 All Rights Reserved</p>
       </footer>
-      <style jsx>{`
+      <style jsx='true'>{`
         footer {
           color: #333;
-          background-color: #e6f0ff;
+          background-color: #3e60948a;
+          
         }
 
         .row {
@@ -131,7 +136,7 @@ export default function Footer() {
           width: 2.5rem;
           height: 2.5rem;
           border-radius: 100%;
-          background-color: #6faaff;
+          background-color: #667489;
         }
 
         ul.social-icons li:hover a {
@@ -172,8 +177,8 @@ export default function Footer() {
           }
 
           ul.social-icons li a {
-            width: 1.875rem;
-            height: 1.875rem;
+            width: 1.975rem;
+            height: 1.975rem;
           }
         }
       `}</style>

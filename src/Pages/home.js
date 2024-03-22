@@ -26,16 +26,6 @@ export default function Home() {
   }
   async function getpopularItemslist(){
     const popItems = await getPopularItems();
-        console.log("ressssssssssssss", popItems);
-        if (popItems?.result) {
-          setPopulatItems(popItems?.result)
-        } else {
-          setPopulatItems([]);
-        }
-  }
-  async function getALlItemslist(){
-    const popItems = await getPopularItems();
-        console.log("ressssssssssssss", popItems);
         if (popItems?.result) {
           setPopulatItems(popItems?.result)
         } else {
@@ -45,14 +35,23 @@ export default function Home() {
 
   return (
     <>
-      {/* <PopularItems/> */}
+      <div className='homeContainer'>
       <TopSlider/>
-      {/* <FeaturedCategory categoryList={categoryList}/> */}
-      <FeaturedCategory/>
+      <FeaturedCategory categoryList={categoryList}/>
       <FeaturedItems populatItem = {populatItems}/>
-      {/* <FeaturedItems/> */}
       <About/>
-    {/* <div style={{height:"800px"}}>Home Page</div> */}
+      </div>
+      <style jsx='true'>{`
+      @media screen and (max-width: 768px) {
+        .homeContainer {
+          position:relative;
+          width: 95%;
+          margin: 15px auto;
+          top: 75px;
+          margin-bottom: 140px;
+        }
+      }
+      `}</style>
     </>
 
   )

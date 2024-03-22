@@ -1,23 +1,43 @@
-import React, { useState } from "react";
-import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getCookies } from "../helpers/cookiehelper";
- 
- 
+import { addProduct } from "../Api/Services/products";
+import { getAllCategories } from "../Api/Services/category";
+import { capitalizeFirstLetter } from "../helpers/helper";
+
+
 
 const AddProduct = () => {
-  
-  const navigate=useNavigate()
-  let {token} = getCookies("token");
+  const categoryref = useRef(null)
+  const navigate = useNavigate()
+  const [categoryList, setCategoryList] = useState([])
+  const [dialogOpen, setDialogOpen] = useState(false)
+  let { token } = getCookies("token");
 
-  const [addProduct, setAddProduct] = useState({
+
+  useEffect(() => {
+    ; (async () => {
+      const categoriesList = await getAllCategories();
+      if (categoriesList?.result) {
+        setCategoryList(categoriesList?.result)
+      } else {
+        setCategoryList([]);
+      }
+    })()
+  }, [])
+
+  const openDialog = () => {
+    setDialogOpen(!dialogOpen)
+  }
+  const [productDetail, setProductDetail] = useState({
     product_name: "",
     product_category: "",
     product_brand: "",
     product_description: "",
     product_code: "",
-    pricing: "",
+    product_pack: [{ size: '', price: '' }],
     rating: "",
     productImg: "",
     quantity: "",
@@ -27,10 +47,38 @@ const AddProduct = () => {
     const { name, value, type } = e.target;
     const file = type === "file" ? e.target.files[0] : null;
 
-    setAddProduct((prevProduct) => ({
+    setProductDetail((prevProduct) => ({
       ...prevProduct,
       [name]: type === "file" ? file : value,
     }));
+  };
+  const handlePackChange = (index, e) => {
+    const { name, value } = e.target;
+    setProductDetail((prevData) => {
+      const updatedPack = [...prevData.product_pack];
+      updatedPack[index][name] = value;
+      return {
+        ...prevData,
+        product_pack: updatedPack,
+      };
+    });
+  };
+  const addPackField = () => {
+    setProductDetail((prevData) => ({
+      ...prevData,
+      product_pack: [...prevData.product_pack, { size: '', price: '' }],
+    }));
+  };
+  const handleCategory = () => {
+    setCategoryList((prevProduct) => ([
+      ...prevProduct,
+      { ['category_name']: categoryref.current.value },
+    ]));
+    setProductDetail((prevProduct) => ({
+      ...prevProduct,
+      ['product_category']: categoryref.current.value,
+    }));
+    setDialogOpen(!openDialog)
   };
 
   const handleClick = async (e) => {
@@ -38,27 +86,24 @@ const AddProduct = () => {
     try {
       const formData = new FormData();
 
-      // Append each field of addProduct to formData
-      for (const key in addProduct) {
-        formData.append(key, addProduct[key]);
+      // Append each field of productDetail to formData
+      for (const key in productDetail) {
+        if (typeof productDetail[key] === 'object' && Array.isArray(productDetail[key])) {
+          formData.append(key, JSON.stringify(productDetail[key]));
+        }
+        else{
+          formData.append(key, productDetail[key]);
+        }
       }
 
-      console.log("@@@", addProduct);
+      console.log("@@@", productDetail);
 
-      // Make sure to use formData instead of addProduct directly
-      const response = await axios.post(
-        "https://rollanytime.onrender.com/api/RA/api/RA/product/addProduct",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "authorization": `bearer ${token}`,
-          },
-        }
-      );
+      // Make sure to use formData instead of productDetail directly
+
+      const response = await addProduct(formData)
       console.log(response);
-      if (response.status === 200) {
-        alert(response.data.message.message);
+      if (response?.result.length) {
+        alert(response?.message);
         navigate('/listing');
       }
     } catch (error) {
@@ -74,7 +119,6 @@ const AddProduct = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
           marginTop: "10px",
         }}
       >
@@ -93,98 +137,161 @@ const AddProduct = () => {
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_name"
+                label="Product Name"
                 margin="normal"
                 fullWidth
                 type="text"
                 name="product_name"
-                value={addProduct.product_name}
+                value={productDetail.product_name}
                 onChange={handleChange}
               />
+            </Grid>
+            <Grid item xs={12} sm={12} md={12}>
+              <FormControl sx={{ width: '100%' }} fullWidth>
+                <InputLabel id="demo-simple-select-autowidth-label" >Product Category</InputLabel>
+                <Select
+                  labelId="demo-simple-select-autowidth-labe"
+                  id="demo-simple-select-helper"
+                  value={productDetail.product_category ?? ''}
+                  label="Product Category"
+                  name="product_category"
+                  onChange={handleChange}
+                >
+                  {categoryList.map((name, id) => (
+                    <MenuItem
+                      key={`${name?.category_name}${id}`}
+                      value={name?.category_name ?? ''}
+                    >
+                      {capitalizeFirstLetter(name?.category_name)}
+                    </MenuItem>
+                  ))}
+                  <MenuItem style={{ background: 'transparent' }} onClick={openDialog} data-testid="menuQuotesPlaceholderId">
+                    <Button data-testid="addVendorId">
+                      Add a Category
+                    </Button>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              <Dialog
+                open={dialogOpen}
+                onClose={openDialog}
+              >
+                <DialogTitle>Product Category</DialogTitle>
+                <DialogContent>
+                  <TextField
+                    required
+                    label="Product Category"
+                    margin="normal"
+                    fullWidth
+                    type="text"
+                    name="product_category"
+                    inputRef={categoryref}
+                    value={productDetail.product_category}
+                  // onChange={handleChange}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={openDialog}>Cancel</Button>
+                  <Button onClick={handleCategory}>Add a Category</Button>
+                </DialogActions>
+              </Dialog>
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_category"
-                margin="normal"
-                fullWidth
-                type="text"
-                name="product_category"
-                value={addProduct.product_category}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                label="product_brand"
+                label="Product Brand"
                 margin="normal"
                 fullWidth
                 type="text"
                 name="product_brand"
-                value={addProduct.product_brand}
+                value={productDetail.product_brand}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_description"
+                label="Product Description"
                 margin="normal"
                 fullWidth
                 type="text"
                 name="product_description"
-                value={addProduct.product_description}
+                value={productDetail.product_description}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="product_code"
+                label="Product Code"
                 margin="normal"
                 fullWidth
                 type="number"
                 name="product_code"
-                value={addProduct.product_code}
+                value={productDetail.product_code}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="pricing"
-                margin="normal"
-                fullWidth
-                type="number"
-                name="pricing"
-                value={addProduct.pricing}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                label="rating"
+                label="Rating"
                 margin="normal"
                 fullWidth
                 type="number"
                 name="rating"
-                value={addProduct.rating}
+                value={productDetail.rating}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                label="quantity"
+                label="Quantity"
                 margin="normal"
                 fullWidth
                 type="number"
                 name="quantity"
-                value={addProduct.quantity}
+                value={productDetail.quantity}
                 onChange={handleChange}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>Add Pack</Typography>
+              <Grid container gap={4}>
+                {productDetail?.product_pack.map((pack, index) => (
+                  <>
+                    <Grid item xs={5}>
+                      <TextField
+                        required
+                        label="Pack Size"
+                        margin="normal"
+                        fullWidth
+                        type="text"
+                        name="size"
+                        value={pack.size}
+                        onChange={(e) => handlePackChange(index, e)}
+                      />
+                    </Grid>
+                    <Grid item xs={5}>
+                      <TextField
+                        required
+                        label="Pack Price"
+                        margin="normal"
+                        fullWidth
+                        type="text"
+                        name="price"
+                        value={pack.price}
+                        onChange={(e) => handlePackChange(index, e)}
+                      />
+                    </Grid>
+                  </>
+                ))}
+                <Grid item xs={12}>
+                  <Button variant="contained" fullWidth onClick={addPackField}>Add </Button>
+                </Grid>
+              </Grid>
+
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -212,6 +319,6 @@ const AddProduct = () => {
       </Grid>
     </>
   );
-};  
+};
 
 export default AddProduct;

@@ -1,73 +1,134 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import SliderCommon from '../Components/common/slideImg';
-import Slider from 'react-slick';
 import { getProductDetails } from '../Api/Services/products';
+import SelectPackage from '../Components/mobile/selectPackage';
+import { useDispatch, useSelector } from 'react-redux';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Button from '@mui/material/Button';
+import {toastError, toastInfo, toastSuccess } from '../helpers/toastHelper';
+import { getUsercartData } from '../Api/Services/user';
+import { addDataTocart } from '../Redux/action';
+
+
 export default function Productdetail() {
-  const {product_id} = useParams();
-  console.log("product id " , product_id)
+
+  let dispatch = useDispatch();
+  const navigate = useNavigate();
+  const cart = useSelector((state) => state.addcart)
+  // console.log("first,", cart)//data from the redux store
+
+  const { product_id } = useParams();
+  // console.log("product id ", product_id)
+  const [rentPrice, setRentPrice] = useState('')
+  const [selectedPack, setSelectedPack] = useState({})
+  const [productStatus, setProductStatus] = useState(false)
+  const [goCartButton, setGoCartButton] = useState(false)
+  const [packArr, setPackArr] = useState([])
   const [productDetail, setProductDetail] = useState({})
-  let products = ["https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg",
-"https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg",
-"https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg",
-"https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg"]
+  const onChangePack = (item) => {
+    setRentPrice(item)
+    packArr.forEach(element => {
+      if (element.price == item) {
+        setSelectedPack(element)
+      }
+    });
 
-useEffect(() => {
-  ;(async()=>{
-    let result = await getProductDetails(product_id);
-    console.log("jabdkjbsa",result)
-    if (result?.result.length) {
+  }
+
+  useEffect(() => {
+    ; (async () => {
+      let cartResult = await getUsercartData();
+      checkFilter(product_id,cartResult)
+      let result = await getProductDetails(product_id);
+      if (result?.result.length) {
         setProductDetail(result?.result[0])
-    }
-  })()
+        setSelectedPack(JSON.parse(result?.result[0]?.product_pack[0])[0])
+        setPackArr(JSON.parse(result?.result[0]?.product_pack[0]))
+        // console.log("product pack", JSON.parse(result?.result[0]?.product_pack[0]))
+        setRentPrice(JSON.parse(result?.result[0]?.product_pack[0])[0]?.price)
+      }
+    })()
+  }, [])
 
- 
-}, [])
+
+  function checkFilter(keyword,array){
+    array.forEach(element => {
+      if (element.product_id==keyword) {
+        toastInfo("Product Is Already added in the cart Please Go to the Cart")
+        setProductStatus(true)
+        setGoCartButton(true)
+      }
+      else{
+        setProductStatus(false)
+        setGoCartButton(false)
+      }
+    });
+  }
+
+
+  const handleAddtoCart = (item) => {
+    let bodyData = {
+      product_id: item?.product_id,
+      product_pack: selectedPack
+    }
+    try {
+      dispatch(addDataTocart(bodyData))
+      toastSuccess('Item added to cart!');
+      setGoCartButton(true)
+    } catch (error) {
+      toastError(error.message); // Display error message if adding item fails
+    }
+  }
+
+  const goCartHandler = () => {
+    navigate('/cart')
+  }
 
   return (
-  <>
-  <div className = "card-wrapper">
-  <div className = "product_card">
-  
-    <div className = "product-imgs">
-      <div className = "img-display">
-        <SliderCommon topSliderCategory={productDetail?.product_imges||[]} detail/>       
-      </div>
-     
-    </div>
-    
-    <div className = "product-content">
-      <h2 className = "product-title">{productDetail?.product_name}</h2>
-    
+    <>
+      <div className="card-wrapper">
+        <div className="product_card">
 
-      <div className = "product-price">
-        <p className = "new-price">Price: <span>Rs.{productDetail?.pricing}</span></p>
-      </div>
+          <div className="product-imgs">
+            <div className="img-display">
+              <SliderCommon topSliderCategory={productDetail?.product_imges || []} detail />
+            </div>
 
-      <div className = "product-detail">
-        <h2>About this item: </h2>
-        <p>{productDetail?.product_description}</p>
-        <ul>
-          <li>Color: <span>Black</span></li>
-          <li>Available: <span>in stock</span></li>
-          <li>Category: <span>Shoes</span></li>
-          <li>Shipping Area: <span>India</span></li>
-          <li>Shipping Fee: <span>Free</span></li>
-        </ul>
-      </div>
+          </div>
 
-      <div className = "purchase-info">
-        <button type = "button" className = "btn">
-          Add to Cart <i className = "fas fa-shopping-cart"></i>
-        </button>
-      </div>
+          <div className="product-content">
+            <h2 className="product-title">{productDetail?.product_name}</h2>
 
-    </div>
-  </div>
-</div>
-<style jsx>
-  {
-    `
+            <div className="product-detail">
+              <h2>About this item: </h2>
+              <p>{productDetail?.product_description}</p>
+              <ul>
+                <li>Select Packs: <SelectPackage packs={packArr} onChangePack={onChangePack} /></li>
+
+              </ul>
+            </div>
+
+            <div className="product-price">
+              <p className="new-price">Price: <span>Rs.{rentPrice}</span></p>
+            </div>
+
+            <div className="purchase-info">
+              <Button variant="contained" disabled={goCartButton} style={{ background: 'green' }} endIcon={<ShoppingCartIcon />} onClick={() => handleAddtoCart(productDetail)}>
+                Add to Cart
+              </Button>
+              {goCartButton ? <Button variant="contained" style={{ background: 'blue' }} onClick={goCartHandler}>
+                Go to Cart
+              </Button> : null}
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <style jsx='true'>
+        {
+          `
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
 
 *{
@@ -122,15 +183,24 @@ img{
     color: #12263a;
     margin: 1rem 0;
 }
-.product-title::after{
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 4px;
-    width: 80px;
-    background: #12263a;
+@media screen and (max-width: 768px) {
+  .card-wrapper {
+    position:relative;
+    width: 95%;
+    margin: 15px auto;
+    top: 130px;
+    margin-bottom: 140px;
+  }
 }
+// .product-title::after{
+//     content: "";
+//     position: absolute;
+//     left: 0;
+//     bottom: 0;
+//     height: 4px;
+//     width: 80px;
+//     background: #12263a;
+// }
 .product-link{
     text-decoration: none;
     text-transform: uppercase;
@@ -185,9 +255,9 @@ img{
 .product-detail ul li{
     margin: 0;
     list-style: none;
-    background: url(https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/checked.png) left center no-repeat;
+    // background: url(https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/checked.png) left center no-repeat;
     background-size: 18px;
-    padding-left: 1.7rem;
+    // padding-left: 1.7rem;
     margin: 0.4rem 0;
     font-weight: 600;
     opacity: 0.9;
@@ -197,6 +267,8 @@ img{
 }
 .purchase-info{
     margin: 1.5rem 0;
+    display:flex;
+    gap:5px;
 }
 .purchase-info input,
 .purchase-info .btn{
@@ -285,8 +357,8 @@ img{
     }
 }
     `
-  }
-</style>
-  </>
+        }
+      </style>
+    </>
   )
 }

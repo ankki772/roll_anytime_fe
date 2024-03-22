@@ -48,7 +48,7 @@ async function getPCategories(){
     <>
       <div className="slksldrwrp">
       <h2> Multiple items </h2>
-          <ul class="slksldr">
+          <ul className="slksldr">
         <Slider {...settings}>
           {/* {popularItems.map((items) => {
             return (

@@ -15,16 +15,16 @@ let editSVG = (
     width="16"
     height="16"
     fill="currentColor"
-    class="bi bi-pencil"
+    className="bi bi-pencil"
     viewBox="0 0 16 16"
   >
     <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
   </svg>
 );
 export default function Profile() {
-  let { token = "" } = getCookies("token");
-  const userDetail = decryptToken(token);
-  console.log("userDetail===>>>>>>>>>> ", userDetail);
+  // let { token = "" } = getCookies("token");
+  // const userDetail = decryptToken(token);
+  // console.log("userDetail===>>>>>>>>>> ", userDetail);
   // if (!userDetail) {
   //   removeCookies("logged_in", "token");
   //   setAuth(false);
@@ -32,11 +32,12 @@ export default function Profile() {
   // }
   const nav = useNavigate();
   const { setAuth } = useContext(UserContext);
+  const [previewURL, setPreviewURL] = useState('https://demos.creative-tim.com/argon-dashboard/assets-old/img/theme/team-4.jpg');
   const [editable, setEditable] = useState(false);
-  const [userInfo, setUserDetail] = useState({
+  const [userInfo, setUserInfo] = useState({
     profile_img: "",
     username: "",
-    email: "",
+    emailphone: "",
     phone: "",
     first_name: "",
     last_name: "",
@@ -47,7 +48,17 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    getUserDetail()
+    (async()=>{
+      let userdetail = await getUserDetail();
+      // console.log("bsjbk",userdetail)
+      if (userdetail.length) {
+        if (userdetail[0]?.profile_img) {          
+          setPreviewURL(userdetail[0]?.profile_img)
+        }
+        setUserInfo({...userInfo,...userdetail[0]})
+      }
+    })()
+    
     return () => {}
   }, []);
 
@@ -57,23 +68,25 @@ const handleUserUpdate = async () =>{
 
   const handleChange = (e) => {
     let {name,value} = e.target
-    console.log("nameeeeeee",name,value)
+    // console.log("nameeeeeee",name,value)
     if(name === "profileImage"){
-    let { imageFormatErr = [], uploadImagesArr = [] } = uploadImages(e);
-    setUserDetail((prev) => ({
+    let { imageFormatErr = [], uploadImagesArr = [],previewImagesURLArr=[] } = uploadImages(e);
+    // console.log("previeImg",previewImagesURLArr[0])
+    setPreviewURL(previewImagesURLArr[0])
+    setUserInfo((prev) => ({
       ...prev,
       profile_img: uploadImagesArr[0],
     }));
   }
   else{
-    console.log("ppppppppppppppppp",name,value)
-    setUserDetail({
+    // console.log("ppppppppppppppppp",name,value)
+    setUserInfo({
       ...userInfo,
       [name]: value
     });
   }
   };
-  console.log("---------->>>", userInfo);
+  // console.log("---------->>>", userInfo);
   return (
 
     <>
@@ -86,7 +99,7 @@ const handleUserUpdate = async () =>{
                   <div className="col-lg-3 order-lg-2">
                     <div className="card-profile-image">
                       <LazyLoadImage
-                        src="https://demos.creative-tim.com/argon-dashboard/assets-old/img/theme/team-4.jpg"
+                        src={previewURL}
                         className="rounded-circle"
                         alt="Image Alt"
                         // placeholderSrc={roll_anytime}
@@ -105,7 +118,7 @@ const handleUserUpdate = async () =>{
                 <div className="card-header text-center border-0 pt-8 pt-md-2 pb-0 pb-md-4"></div>
 
                 <div className="text-center">
-                  <h3>Jessica Jones</h3>
+                  <h3>{(userInfo?.first_name+userInfo?.last_name)||userInfo?.username||"User"}</h3>
                 </div>
               </div>
             </div>
@@ -140,7 +153,7 @@ const handleUserUpdate = async () =>{
                               labelClass="form-control-label"
                               inputClass="form-control form-control-alternative"
                               placeholder="Username"
-                              defaultValue="lucky.jesse"
+                              defaultValue={userInfo?.username}
                               name="username"
                               editable={editable}
 
@@ -158,9 +171,9 @@ const handleUserUpdate = async () =>{
                               labelClass="form-control-label"
                               inputClass="form-control form-control-alternative"
                               placeholder="jesse@example.com"
-                              defaultValue={userInfo.email}
+                              defaultValue={userInfo?.emailphone}
                               name="email"
-                              editable={editable}
+                              editable={false}
                             />
                           </div>
                         </div>
@@ -177,7 +190,7 @@ const handleUserUpdate = async () =>{
                               labelClass="form-control-label"
                               inputClass="form-control form-control-alternative"
                               placeholder="First name"
-                              defaultValue="Lucky"
+                              defaultValue={userInfo?.first_name}
                               name="first_name"
                               editable={editable}
                             />
@@ -194,7 +207,7 @@ const handleUserUpdate = async () =>{
                               labelClass="form-control-label"
                               inputClass="form-control form-control-alternative"
                               placeholder="Last name"
-                              defaultValue="Lucky"
+                              defaultValue={userInfo?.last_name}
                               name="last_name"
                               editable={editable}
                             />
@@ -220,7 +233,7 @@ const handleUserUpdate = async () =>{
                               labelClass="form-control-label"
                               inputClass="form-control form-control-alternative"
                               placeholder="Address"
-                              defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                              defaultValue={userInfo?.address}
                               name="address"
                               editable={editable}
                             />
@@ -239,7 +252,7 @@ const handleUserUpdate = async () =>{
                               labelClass="form-control-label"
                               inputClass="form-control form-control-alternative"
                               placeholder="City"
-                              defaultValue="New York"
+                              defaultValue={userInfo?.city}
                               name="city"
                               editable={editable}
                             />
@@ -256,7 +269,7 @@ const handleUserUpdate = async () =>{
                               labelClass="form-control-label"
                               inputClass="form-control form-control-alternative"
                               placeholder="Country"
-                              defaultValue="United States"
+                              defaultValue={userInfo?.country}
                               name="country"
                               editable={editable}
                             />
@@ -274,7 +287,7 @@ const handleUserUpdate = async () =>{
                               labelClass="form-control-label"
                               inputClass="form-control form-control-alternative"
                               placeholder="Postal coe"
-                              defaultValue="United States"
+                              defaultValue={userInfo?.postalCode}
                               name="postalCode"
                               editable={editable}
                             />

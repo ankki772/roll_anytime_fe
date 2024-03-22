@@ -11,14 +11,14 @@ export default function About() {
       <div className='second'>
         <h2>
         About <br/>
-        Roll Anytime
+        <strong>ROLLTM</strong>
         </h2>
         <h6>
         Convenient access to any item
         </h6>
         <p>
-        Car Rental Experience was extraordinary going with this taxis administration rental. The rates were moderate, driver was acceptable.<br/>
-        Car Rental Experience was extraordinary going with this taxis administration rental. The rates were moderate, driver was acceptable.
+        Welcome to <strong>ROLLTM.</strong>, the world's first full filmmaking production company revolutionizing the industry. Our primary mission is to redefine the filmmaking process by eliminating unnecessary brokerage, allowing you to invest more in quality production.
+         With us, you can order your filmmaking essentials up to 2 hours before the shoot, ensuring everything arrives on time. Embrace efficiency, prioritize quality, and experience a seamless filmmaking journey with <strong>ROLLTM.</strong>
         </p>
       </div>
     </div>

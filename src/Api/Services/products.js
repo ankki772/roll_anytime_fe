@@ -31,3 +31,23 @@ export const getProductDetails = async  (product_id) =>{
     }
 
 }
+export const getProductByCategory = async  (category) =>{
+    try{
+        let response = await client.get(`product/getCategory/${category}`,{authorization:true});       
+        return response ;
+    }
+    catch(err){
+        return [];
+    }
+
+}
+export const addProduct = async  (formData) =>{
+    try{
+        let response = await client.post(`product/addProduct`,formData,{authorization:true});       
+        return response ;
+    }
+    catch(err){
+        return [];
+    }
+
+}

@@ -1,39 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { dummysubcatlist } from "../../dummyprd";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { getProductByCategory } from "../../Api/Services/products";
+import LongMenu from "./menuDrop";
+import { useSelector } from "react-redux";
+import { toastError, toastSuccess } from "../../helpers/toastHelper";
 
-export default function SUbcategoryList() {
+export default function SUbcategoryList({ categoryName }) {
+  const [categoryList, setCategoryList] = useState([])
+  const [packArr, setPackArr] = useState([])
+  const cart = useSelector((state) => state.addcart)
+
+
+
+  useEffect(() => {
+    ; (async () => {
+      let result = await getProductByCategory(categoryName);
+      if (result?.result.length) {
+        setCategoryList(result?.result)
+        setPackArr(JSON.parse(result?.result[0]?.product_pack[0]))
+      }
+    })()
+  }, [categoryName])
+
+
+
   return (
     <>
-      <div class="subcat-container">
-        <div class="top-head">
+      <div className="subcat-container">
+        <div className="top-head">
           <h2>Most popular</h2>
           <h2>Name</h2>
           <h2>Price</h2>
+          <h2>Action</h2>
         </div>
-        <ul class="subcat-item-list">
-          {dummysubcatlist.map((item, idx) => (
-            <Link to="/account" className="catlist">
-              <li class="subcat-item" key={`${idx}_scl`}>
+        <ul className="subcat-item-list">
+          {categoryList.map((item, idx) => (
+              <li className="subcat-item" key={`${idx}_scl`}>
+                <Link to={`/product/${item?.product_id}`}>
                 <span>
                   <LazyLoadImage
-                    src={item.img_url}
+                    src={item?.product_imges[0]}
                     className="rollanytime_logo"
                     alt="Image Alt"
                     effect="blur"
                   />
                 </span>
-                <span>{item.sub_cat_name}</span>
-                <span>{item.price}</span>
-              </li>
-            </Link>
+                </Link>
+                <span>{item?.product_name?.split(' ').splice(0, 2).join(' ')}</span>
+                <span>{item?.pricing}</span>
+                <span><LongMenu viewProduct={`/product/${item?.product_id}`} packs={packArr} product_id={item?.product_id}/></span>
+                </li>
           ))}
-          <Link to='/listing/'>
-            <li>
+          {/* {categoryList.length > 3 ?
+            <Link to={`categories/${categoryName}`}>
+
               View all
-            </li>
-          </Link>
+
+            </Link> : null} */}
         </ul>
       </div>
       <style jsx>{`
@@ -45,7 +69,7 @@ export default function SUbcategoryList() {
           flex-direction: column;
           gap: 10px;
           background-color: #f6f6f6;
-          margin: 0;
+          margin: 10px 0px 0px 0px;
         }
         .subcat-container .top-head {
           width: 100%;
@@ -59,10 +83,10 @@ export default function SUbcategoryList() {
           color: #5c6158e0;
         }
         .subcat-item-list {
-          list-style: none;
-          display: flex;
-          flex-direction: column;
-          padding: 5px 0;
+          overflow-y: scroll;
+          display: block;
+          max-height: 250px;
+      
         }
         .subcat-item-list .subcat-item {
           display: flex;

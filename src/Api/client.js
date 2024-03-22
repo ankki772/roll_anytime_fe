@@ -1,14 +1,13 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { setCookies,getCookies } from '../helpers/cookiehelper';
+import { apiUrl } from '../site.config';
 
 export const client  = axios.create({
 	// Configuration
-	// baseURL: 'https://a135-2401-4900-81f7-3a0e-fdeb-4fad-bbaf-f846.ngrok-free.app/api/RA/',
-	baseURL: 'https://rollanytime.onrender.com/api/RA/',
-	// baseURL: ' localhost:8000/api/RA/',
+	baseURL: apiUrl,
 
-	timeout: 8000,
+	// timeout: 12000,
 	headers: {
 		Accept: 'application/json',
     	},
@@ -18,7 +17,6 @@ client.interceptors.request.use(function (config) {
     // Do something before request is sent
     // let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Yzc5NjljYzU0ZDNjZWExMWNhMTc4MyIsInVzZXJuYW1lIjoiZGl3ZWRpYXNoaXNoIiwiZW1haWxwaG9uZSI6ImFkaXdlZGkxMkBrbG91ZHJhYy5jb20iLCJpYXQiOjE3MDQ2OTc0NTYsImV4cCI6MTcwNDc4Mzg1Nn0.lciSHPkaueKw25pTIyWIG27mcxPUt1vtzdWiO0eGwKU"
     let {token} = getCookies("token");
-    console.log("------------------------------------------------",config)
     if(config.authorization == true)   config.headers.Authorization =`Bearer ${token}`
     return config;
   }, function (error) {
@@ -30,9 +28,8 @@ client.interceptors.request.use(function (config) {
 client.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    // console.log("reeeeeeeeeeeeeee",response)
     if(response?.data?.message?.token && response.status==200){
-      setCookies(["token",response.data.message.token],["logged_in",true])
+      setCookies(["token",response.data.message.token],["logged_in",true],["role",response?.data?.message?.role])
     }
     return response?.data?.message;
   }, function (error) {

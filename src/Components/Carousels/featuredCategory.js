@@ -1,70 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import SUbcategoryList from "../mobile/subcategoryList";
+import { capitalizeFirstLetter } from "../../helpers/helper";
 
-const Images = [
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1552168324-d612d77725e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2FtZXJhfGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 1",
-    Category: "Camera",
-    description:
-      "The Huracán Performante has reworked the concept of super sports cars and taken the notion of performance to levels never seen before.",
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1507494924047-60b8ee826ca9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80",
-    alt: "Image 2 ",
-    Category: "Lights",
-    description:
-      "This Turbo S variant comes with an engine putting out 641 bhp @ 6750 rpm and 800 Nm @ 2500 rpm of max power and max torque respectively.",
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=452&q=80",
-    alt: "Image 3",
-    category: "Cabs",
-    description: "For offroad lovers. Super fast, Super Comfortable.",
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 4",
-    category: "Food ",
-    description:
-      "Aventador SV provide thrills unlike anything that has ever been experienced before.",
-  },
-  {
-    id: 5,
-    src: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWFrZXVwfGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 5",
-    category: "Makeup ",
-    description:
-      "0 to 100 km/h (0 to 62 mph) takes 3.0 seconds and the Spider is capable of a top speed of 400 km/h (249 mph).",
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1611425094224-ab2b0eab0458?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y3Jld3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 6",
-    category: "Crew",
-    description:
-      "The Porsche 911 (pronounced Nine Eleven or in German: Neunelfer) is a two-door 2+2 high performance rear-engined sports car.",
-  },
-  {
-    id: 7,
-    src: "https://images.unsplash.com/photo-1611048268330-53de574cae3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8d2FyZHJvYmV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
-    alt: "Image 7",
-    category: "Wardrobe",
-    description:
-      "The Challenger has a classic muscle-car interior, with a simple design",
-  },
-];
 
-export default function featuredItems({categoryList}) {
+export default function FeaturedItems({ categoryList }) {
+  const [categoryName, setCategoryName] = useState(categoryList[0]?.category_name)
+
+  useEffect(() => {
+    setCategoryName(categoryList[0]?.category_name);
+  }, [categoryList[0]?.category_name])
+  
+
+  useEffect(() => {
+    // ;(async () => {
+    //   let result = await getProductByCategory(categoryName);
+    //   console.log("result of category",result)
+    //   if (result?.result.length) {
+    //   }
+    // })()
+  }, [])
   const settings = {
     dots: false,
     infinite: true,
@@ -82,7 +41,7 @@ export default function featuredItems({categoryList}) {
               width="30"
               height="30"
               fill="white"
-              class="bi bi-caret-right-fill"
+              className="bi bi-caret-right-fill"
               viewBox="0 0 16 16"
             >
               <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
@@ -101,7 +60,7 @@ export default function featuredItems({categoryList}) {
               width="30"
               height="30"
               fill="white"
-              class="bi bi-caret-left-fill"
+              className="bi bi-caret-left-fill"
               viewBox="0 0 16 16"
             >
               <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
@@ -116,9 +75,9 @@ export default function featuredItems({categoryList}) {
         settings: {
           arrows: false,
           dots: false,
-          infinite: false,
+          // infinite: false,
           slidesToShow: 3.5,
-          slidesToScroll: 1,
+          slidesToScroll: 3.5,
           autoplay: false,
           speed: 1000,
           autoplaySpeed: 7000,
@@ -127,32 +86,58 @@ export default function featuredItems({categoryList}) {
       },
     ],
   };
+
+  const categoryHandler = (name)=>{
+    if (isMobile) {
+      // console.log("mobilecategory",name)
+      setCategoryName(name);
+    }
+
+  }
   return (
     <>
       <div className="content">
-        <h2 className="header1">Featured Category</h2>
+        <div className="header-content">
+          <h2 className="header1">Featured Category</h2>
+          <div className="view-all">            
+            <Link to={'/allCategory'}>View All</Link>
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="14"
+              fill="currentColor"
+              className="bi bi-chevron-right"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+              />
+            </svg>
+          </div>
+        </div>
         <div className="car-container">
           <Slider {...settings}>
-            {Images.map((item, idx) => (
-              <Link to={"/product/kkk"}>
+            {categoryList.map((item, idx) => (
+              <Link to={!isMobile?`categories/${item?.category_name}`:null} onClick={()=>categoryHandler(item?.category_name)} key={item?._id}>
                 <div
                   key={item.id + "fc"}
                   className={`img_wrap ${idx === 0 ? "active_cat" : ""}`}
                 >
                   <img
-                    src={item.src}
-                    alt={item.alt}
+                    src={item?.category_images}
+                    alt={item?.category_name}
                     className="img"
                     loading="lazy"
                   />
-                  <h2 className="title">{item?.category || ""}</h2>
+                  <h2 className="title">{capitalizeFirstLetter(item?.category_name || "")}</h2>
                   {/* <p className="description">{item.description}</p> */}
                 </div>
               </Link>
             ))}
           </Slider>
         </div>
-        {isMobile ? <SUbcategoryList /> : null}
+        {isMobile ? <SUbcategoryList categoryName={categoryName} /> : null}
       </div>
 
       <style jsx>{`
@@ -228,6 +213,15 @@ export default function featuredItems({categoryList}) {
           place-items: center;
           border-radius: 50%;
           background-color: #ccc;
+        }
+        .header-content{
+          position: relative;
+          display: flex;
+        }
+        .view-all{
+          position:absolute;
+          right:25px;
+          top:10px;
         }
       
      

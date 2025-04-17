@@ -16,16 +16,16 @@ export default function SlideImg({topSliderCategory,detail=false}) {
   return (
   <>
   <Slider {...settings}>
-            {topSliderCategory.map((item) => (
+            {topSliderCategory.map((item,id) => (
              
-                 <div className='container-base myx-stretch'>
+                 <div className='container-base myx-stretch' key={id}>
                     <div style={{paddingBottom:"50px"}}>
                         <div className='container-container container-aspectContainer'>
                             <div className=' row-base'>
                                 <div className=' column-base'>
-                                    <Link to='/product/id'>
+                                    {/* <Link to='/product/id'> */}
                                            <img className='image-image image-hand' src={detail ? item : item.img_url} alt=''/>
-                                    </Link>
+                                    {/* </Link> */}
                                 </div>
                             </div>
 
@@ -36,7 +36,7 @@ export default function SlideImg({topSliderCategory,detail=false}) {
                  </div>           
             ))}
           </Slider>
-        <style jsx>
+        <style jsx='true'>
             {`
                    .container-base {
                     -webkit-box-sizing: border-box;

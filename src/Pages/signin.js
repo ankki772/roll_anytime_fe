@@ -5,10 +5,15 @@ import { signInUser } from "../Api/Services/user";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../Contexts/userContext";
 import { setCookies } from "../helpers/cookiehelper";
+import { useDispatch } from "react-redux";
+import { fetchCartData } from "../Redux/action";
 
 export default function SignIn() {
   const navigate = useNavigate()
+  let dispatch = useDispatch();
   const {setAuth} = useContext(UserContext);
+  const [loading, setLoading] = useState(false)
+  const [btndisable, setBtndisable] = useState(false)
   const [values, setValues] = useState({
     emailphone: "",
     password: "",
@@ -24,9 +29,9 @@ function validatePhoneNumber(input_str) {
       setValues({...values,[e.target.name]:e.target.value});
   }
   const onSubmit= async (e)=>{
-
+    setLoading(true)
+    setBtndisable(true)
     let countryCode = "+91";
-    console.log("========",values)
 
     if(validatePhoneNumber(values.emailphone)){
       values.emailphone = `${countryCode}${values.emailphone}`
@@ -35,8 +40,11 @@ function validatePhoneNumber(input_str) {
     let response = await signInUser(values);
     console.log("response from login",response,response?.status == 200)
     if(response?.token){
+      setLoading(false)
+      setBtndisable(false)
       setAuth(true)
       console.log("naviagteion")
+      dispatch(fetchCartData())
       navigate('/');
     }
     else{
@@ -51,11 +59,11 @@ function validatePhoneNumber(input_str) {
         <form onSubmit={onSubmit}>
           {signInFiels.map((input) => (
             <div className="txt_field" key={input.id}>
-              <Input key={input.id} {...input} value={values[input.name]} onChange={onChange}/>
+              <Input key={input.id} {...input} value={values[input.name]} onChange={onChange} editable={true}/>
             </div>            
           ))}
           <div className="pass">Forgot password?</div>
-          <button type="submit">Sign in</button>
+          <button type="submit" disabled={btndisable}>{!loading?'Sign in':'Loading...'}</button>
           <div className="signup_link">
             Not a member ? <Link to="/signup"> sign up</Link>
           </div>

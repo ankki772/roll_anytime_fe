@@ -29,7 +29,7 @@ export default function SignUp() {
         <form onSubmit={onSubmit}>
           {signUpFields.map((input) => (
             <div className="txt_field" key={input.id}>
-              <Input key={input.id} {...input} value={values[input.name]} onChange={onChange}/>
+              <Input key={input.id} {...input} value={values[input.name]} onChange={onChange} editable={true}/>
             </div>
 
               

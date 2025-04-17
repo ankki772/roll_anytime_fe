@@ -1,391 +1,90 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TopStrip } from "../Components/topStrip";
 import { isMobile } from "react-device-detect";
-export default function productListing() {
-  console.log("==============", isMobile);
+import { getAllItems, getPopularItems, getProductByCategory } from "../Api/Services/products";
+export default function ProductListing() {
+  const navigate = useNavigate();
+  const [productList, setProductList] = useState([])
+  const { pathname } = useLocation();
+
+  let { category_name } = useParams();
+  useEffect(() => {
+    ; (async () => {
+      try {
+        if (category_name) {
+          let result = await getProductByCategory(category_name);
+          if (result?.result.length) {
+            setProductList(result?.result)
+          }
+        }
+        else if (pathname == '/popularItem') {
+          let result = await getPopularItems();
+          if (result?.result.length) {
+            setProductList(result?.result)
+          }
+        }
+        else {
+          let result = await getAllItems();
+          if (result?.result.length) {
+            setProductList(result?.result)
+          }
+        }
+
+      }  catch (error) {
+
+      }
+
+    })()
+  }, [])
+
   return (
     <>
       <div className="row-base">
-        <div className="search-leftContainer column-base">
-          <section>
-            <div className="condition-render-verticalFilters condition-render-boundary-top">
-              <div className="vertical-filters-filters header-container">
-                <span className="header-title">FILTERS</span>
-              </div>
-              <div className="vertical-filters-filters categories-container">
-                <span className="vertical-filters-header "> CATEGORIES</span>
-                <ul className="categories-list">
-                  <li>
-                    <label class="common-customCheckbox vertical-filters-label">
-                      <input type="checkbox" value="Tshirts" />
-                      "Tshirts"
-                      <span class="categories-num"></span>
-                      <div class="common-checkboxIndicator"></div>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="common-customCheckbox vertical-filters-label">
-                      <input type="checkbox" value="Tshirts" />
-                      "Tshirts"
-                      <span class="categories-num"></span>
-                      <div class="common-checkboxIndicator"></div>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="common-customCheckbox vertical-filters-label">
-                      <input type="checkbox" value="Tshirts" />
-                      "Tshirts"
-                      <span class="categories-num"></span>
-                      <div class="common-checkboxIndicator"></div>
-                    </label>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </section>
-        </div>
         <div className="search-rightContainer column-base">
-          <TopStrip />
+          <TopStrip setProductList={setProductList} productList={productList}/>
           <div className="search-searchProductsContainer row-base">
             <section style={{ display: "block" }}>
               <ul className="results-base">
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt=""
-                        src="https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/17605700/2023/2/17/90bf4f54-5da2-44ab-aadb-97de558ce0041676633122557-Difference-of-Opinion-Men-Blue-Conversational-Printed-Pure-C-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
-                          </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
+                {productList && !!productList.length && productList.map((item, id) => {
+                  return (
+                  <li className="product-base" key={item?._id} onClick={()=>{navigate(`/product/${item?.product_id}`)}}>
+                    <div className="product-thumbShim"></div>
+                    <a href="#" style={{ display: "block" }}>
+                      <div className="product-imageSliderContainer">
+                        <img
+                          alt=""
+                          src={item?.product_imges[0]}
+                        />
                       </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt=""
-                        src="https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/17605700/2023/2/17/90bf4f54-5da2-44ab-aadb-97de558ce0041676633122557-Difference-of-Opinion-Men-Blue-Conversational-Printed-Pure-C-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
+                      <div className="product-productMetaInfo">
+                        <h3 className="product-brand">{item?.product_name}</h3>
+                        <h4 className="product-product">
+                          {item?.product_brand}
+                        </h4>
+                        <h4 className="product-sizes">
+                          Sizes:
+                          <span className="product-sizeInventoryPresent">
+                            XXL
                           </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt=""
-                        src="https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/17605700/2023/2/17/90bf4f54-5da2-44ab-aadb-97de558ce0041676633122557-Difference-of-Opinion-Men-Blue-Conversational-Printed-Pure-C-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
+                        </h4>
+                        <div className="product-price">
+                          <span>
+                            <span className="product-discountedPrice">
+                              {/* {console.log("firsttttttttt",JSON.parse(item?.product_pack[0])[0].price)} */}
+                              Rs.{`${JSON.parse(item?.product_pack[0])[0].price}/${JSON.parse(item?.product_pack[0])[0].size}`}
+                            </span>
+                            {/* <span className="product-strike">Rs. 1299</span> */}
                           </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
+                          {/* <span className="product-discountPercentage">
+                            (62% OFF)
+                          </span> */}
+                        </div>
                       </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt=""
-                        src="https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/17605700/2023/2/17/90bf4f54-5da2-44ab-aadb-97de558ce0041676633122557-Difference-of-Opinion-Men-Blue-Conversational-Printed-Pure-C-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
-                          </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt="l"
-                        src="https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/17605700/2023/2/17/90bf4f54-5da2-44ab-aadb-97de558ce0041676633122557-Difference-of-Opinion-Men-Blue-Conversational-Printed-Pure-C-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
-                          </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt=""
-                        src="https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/17605700/2023/2/17/90bf4f54-5da2-44ab-aadb-97de558ce0041676633122557-Difference-of-Opinion-Men-Blue-Conversational-Printed-Pure-C-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
-                          </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt="img"
-                        src="https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/19774260/2023/6/23/0b4f2dbc-b71b-4727-b82c-8de24ce97c081687495283765-SPYKAR-Men-Tshirts-581687495283406-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
-                          </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt=""
-                        src="https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/23069858/2023/6/27/cc47f97f-1e35-4b63-a149-113dbf316e5c1687864652928-HERENOW-Men-Tshirts-4411687864652559-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
-                          </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img src="https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/22411820/2023/7/6/6e97b54f-eb49-4371-b1a6-97240ffc1e491688629834287-HRX-by-Hrithik-Roshan-Men-Tshirts-8391688629833846-1.jpg" />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
-                          </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li className="product-base">
-                  <div className="product-thumbShim"></div>
-                  <a href="#" style={{ display: "block" }}>
-                    <div className="product-imageSliderContainer">
-                      <img
-                        alt="img"
-                        src="https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/17605700/2023/2/17/90bf4f54-5da2-44ab-aadb-97de558ce0041676633122557-Difference-of-Opinion-Men-Blue-Conversational-Printed-Pure-C-1.jpg"
-                      />
-                    </div>
-                    <div className="product-productMetaInfo">
-                      <h3 className="product-brand">Difference of Opinion</h3>
-                      <h4 className="product-product">
-                        Cotton Oversized T-Shirt
-                      </h4>
-                      <h4 className="product-sizes">
-                        Sizes:
-                        <span className="product-sizeInventoryPresent">
-                          XXL
-                        </span>
-                      </h4>
-                      <div className="product-price">
-                        <span>
-                          <span className="product-discountedPrice">
-                            Rs.493
-                          </span>
-                          <span className="product-strike">Rs. 1299</span>
-                        </span>
-                        <span className="product-discountPercentage">
-                          (62% OFF)
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
+                    </a>
+                  </li>
+                  )
+                })}
               </ul>
             </section>
           </div>
@@ -420,8 +119,12 @@ export default function productListing() {
             width: 100%;
             -webkit-box-pack: justify;
             -ms-flex-pack: justify;
-            justify-content: space-between;
+            justify-content: start;
             padding: 0;
+            gap: 20px;
+          }
+          .search-searchProductsContainer section{
+            width:100%;
           }
           .product-base {
             width: 210px;
@@ -562,31 +265,15 @@ export default function productListing() {
             padding-top: 24px;
             padding-left: 15px;
             padding-right: 20px;
+            margin-bottom:140px;
           }
           .row-base {
             display: flexbox;
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
-            -webkit-box-orient: horizontal;
-            -ms-flex-direction: row;
-            flex-direction: row;
-            -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-            -webkit-box-pack: start;
-            -ms-flex-pack: start;
-            justify-content: flex-start;
-            -webkit-box-align: stretch;
-            -ms-flex-align: stretch;
-            align-items: stretch;
-            -ms-flex-line-pack: stretch;
-            align-content: stretch;
-          }
-          .row-base {
-            display: flexbox;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
+            position:relative;
+            top:75px;
             -webkit-box-orient: horizontal;
             -ms-flex-direction: row;
             flex-direction: row;

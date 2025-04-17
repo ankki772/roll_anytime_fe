@@ -1,90 +1,120 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@mui/material";
+import { loadStripe } from '@stripe/stripe-js';
+import { getUserDetail, getUsercartData } from "../Api/Services/user";
+import { totalsumCartPrice } from "../helpers/helper";
+import { toastError, toastInfo, toastSuccess } from '../helpers/toastHelper';
+import { removeDatafromCart } from "../Redux/action";
+import { apiUrl } from "../site.config";
 
 export default function Cart() {
+  let dispatch = useDispatch();
+
+  const cart = useSelector((state) => state.removecart)
+  // console.log("first,", cart)
+  const [userCartData, setUserCartData] = useState([])
+  const [cartPrice, setCartPrice] = useState(0)
+  useEffect(() => {
+    ; (async () => {
+
+      const userData = await getUsercartData();
+      console.log("userdetails", userData);
+      setUserCartData(userData)
+      setCartPrice(totalsumCartPrice(userData))
+    })()
+    if (cart.status == 'succeeded') {
+      toastSuccess("Item Successfully removed from the cart");
+    }
+    else if (cart.status == 'failed') {
+      toastError("Item is Not removed due to some error")
+    }
+  }, [cart])
+
+
+  const makePayment = async () => {
+    const stripe = await loadStripe('pk_test_51OZvJBSGaKsXrSjrOGSV2Nf77fT8XTECnkJBvzF8nzfiJTQsHi3dFE8ZfdpshF5ZWPAxGn6WAmnXjAb29qNFK3Gi001tdFMBLi');
+
+    const body = {
+      products: userCartData
+    }
+    const headers = {
+      "Content-Type": "application/json"
+    }
+    const response = await fetch(`${apiUrl}product/create_payment`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body)
+    });
+
+    const session = await response.json();
+
+    const result = stripe.redirectToCheckout({
+      sessionId: session.id
+    });
+
+    if (result.error) {
+      console.log(result.error);
+    }
+  }
+
+  const removeHandler = (product_id) => {
+    // console.log("productId", product_id)
+    dispatch(removeDatafromCart({ product_id }))
+  }
+
   return (
     <>
       <div className="cart-wrapper">
         <section className="cart-items-wrapper">
           <ul>
-            <li>
-              <div class="product">
-                <img
-                  src="https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w="
-                  alt=""
-                />
-                <div className="product-info">
-                  <p>Antique Clock from ancient</p>
-                  <div className="product-price">
-                    <p>
-                      <strong>Rs. 74.99</strong>{" "}
-                    </p>
-                  </div>
+            {userCartData && !!userCartData.length ? userCartData.map((item, id) => {
 
-                  <div className="product-removal">
-                    <button className="remove-product">Remove</button>
+              return <li key={item?._id}>
+                <div className="product">
+                  <img
+                    src={item?.product_imges[0]}
+                    alt=""
+                  />
+                  <div className="product-info">
+                    <p>{item?.product_name}</p>
+                    <div className="product-price">
+                      <p>
+                        <strong>Rs. {item?.product_pack[0]?.price || ''}</strong>{" "}
+                      </p>
+                    </div>
+
+                    <div className="product-removal">
+                      <button className="remove-product" onClick={() => removeHandler(item?.product_id)}>Remove</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-            <li>
-              <div class="product">
-                <img
-                  src="https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w="
-                  alt=""
-                />
-                <div className="product-info">
-                  <p>Antique Clock from ancient</p>
-                  <div className="product-price">
-                    <p>
-                      <strong>Rs. 74.99</strong>{" "}
-                    </p>
-                  </div>
-
-                  <div className="product-removal">
-                    <button className="remove-product">Remove</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="product">
-                <img
-                  src="https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w="
-                  alt=""
-                />
-                <div className="product-info">
-                  <p>Antique Clock from ancient</p>
-                  <div className="product-price">
-                    <p>
-                      <strong>Rs. 74.99</strong>{" "}
-                    </p>
-                  </div>
-
-                  <div className="product-removal">
-                    <button className="remove-product">Remove</button>
-                  </div>
-                </div>
-              </div>
-            </li>
+              </li>
+            }) :
+              <div>Pls add some product to the cart</div>}
           </ul>
         </section>
-        <section className="total-wrapper">
+        {userCartData && !!userCartData.length && <section className="total-wrapper">
           <div className="total-title">Price Details</div>
           <div className="total-detail">
             <div className="total-price">
-              <span>Price (6 items)</span>
-              <span>Rs .1800</span>
+              <span>Price ({userCartData.length} items)</span>
+              <span>Rs .{cartPrice}</span>
             </div>
-            <div className="total-price">
+            {/* <div className="total-price">
               <span>Delivery Charges</span>
               <span>Rs. 880</span>
-            </div>
+            </div> */}
           </div>
           <div className="total-amount">
-              <span>Total Amount</span>
-              <span>Rs. 1800</span>
-            </div>
-        </section>
+            <span>Total Amount</span>
+            <span>Rs. {cartPrice}</span>
+          </div>
+          <div className="total-amount">
+            <span></span>
+            <span><Button style={{ background: 'red', color: 'white' }} onClick={makePayment}>Proceed</Button></span>
+          </div>
+        </section>}
       </div>
 
       <style jsx>
@@ -196,8 +226,11 @@ export default function Cart() {
           }
           @media screen and (max-width: 768px) {
             .cart-wrapper {
+              position:relative;
               width: 95%;
               margin: 15px auto;
+              top: 65px;
+              margin-bottom: 80px;
             }
             .cart-wrapper .cart-items-wrapper,
             .cart-wrapper .total-wrapper {

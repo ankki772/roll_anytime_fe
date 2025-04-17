@@ -17,7 +17,8 @@ export default function Input(props) {
     labelClass = "",
     inputClass = "",
     value = "",
-    defaultValue=""
+    defaultValue="",
+    editable = false
     
   } = props;
   const handleFocus = () => {
@@ -47,6 +48,7 @@ export default function Input(props) {
           onBlur={handleFocus}
           focused={focused.toString()}
           hidden={hidden}
+          disabled={!editable}
           id={id}
           // value={value}
           defaultValue={defaultValue}

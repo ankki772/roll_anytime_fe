@@ -1,7 +1,6 @@
 import React from 'react'
 import { topSliderCategory } from '../../dummyprd';
-import { Link } from 'react-router-dom';
-import Slider from 'react-slick';
+import { isMobile } from "react-device-detect";
 import SliderCommon from '../common/slideImg';
 export default function TopSlider() {
     const settings = {
@@ -30,7 +29,7 @@ export default function TopSlider() {
         height:400px;
         overflow:hidden;
         background-color:#f6f6f6;
-        margin-top:10px
+        margin-top:${isMobile?'60px':'10px'};
     }
    
     .myx-indexContainer>div.myx-stretch {

@@ -1,13 +1,31 @@
 import React, { useState } from 'react'
 
-export const TopStrip = () => {
+export const TopStrip = ({setProductList,productList}) => {
     const [first, setfirst] = useState('')
     const handleChange=(e)=>{
-     console.log("============",e.target)
-     setfirst(e.target.value)
+        let key = e;
+     console.log("============",productList)
+    //  console.log("============",JSON.parse(productList[0].product_pack))
+     switch (key) {
+        case 'l':
+            let arr = productList.sort((a, b) => parseFloat(JSON.parse(a.product_pack)[0].price) - parseFloat(JSON.parse(b.product_pack)[0].price));
+            setProductList(arr)
+            console.log("first,arr",arr)
+            break;
+     
+        case 'h':
+            let arr2 = productList.sort((a, b) => parseFloat(JSON.parse(b.product_pack)[0].price) - parseFloat(JSON.parse(a.product_pack)[0].price));
+            setProductList(arr2)
+            console.log("hhhhhhhhhh",arr2)
+            break;
+     
+        default:
+            break;
+     }
+    //  setfirst(e.target.value)
     //  document.querySelector('.sort-list').style.display="none"
     }
-    console.log("=>>>>>>",first)
+    // console.log("=>>>>>>",first)
   return (
     <>
     <div className='row-base'>
@@ -23,22 +41,22 @@ export const TopStrip = () => {
                         <ul className='sort-list'>
                             <li>
                                 <label className='sort-label'>
-                                    <input type='radio' value={"recommndeded"} onChange={handleChange}/>
-                                    {"recommended"}
+                                    <input type='radio' value={"recommndeded"} onChange={(e)=>handleChange('l')}/>
+                                    {"Price Low to High"}
                                 </label>
                             </li>
                             <li>
                                 <label className='sort-label'>
-                                    <input type='radio' value={"recommndeded2"} onChange={handleChange}/>
-                                    {"recommended"}
+                                    <input type='radio' value={"recommndeded2"} onChange={(e)=>handleChange('h')}/>
+                                    {"Price Hight to Low"}
                                 </label>
                             </li>
-                            <li>
+                            {/* <li>
                                 <label className='sort-label'>
                                     <input type='radio' value={"recommndeded3"} onChange={handleChange}/>
                                     {"recommended"}
                                 </label>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                 </div>
@@ -86,7 +104,6 @@ export const TopStrip = () => {
     -ms-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    border-bottom: 1px solid #eaeaec;
     padding-bottom: 15px;
     padding-top: 23px;
 }

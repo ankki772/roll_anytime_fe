@@ -13,6 +13,7 @@ import ProtectedRoute from "./Utils/protectedRoute";
 import { ProductCart } from "./Components/productCart";
 import { isMobile,isTablet } from "react-device-detect";
 import Cart from "./Pages/cart";
+import Success from "./Components/common/success";
 export const routes = [
   {
     path: "/",
@@ -28,8 +29,16 @@ export const routes = [
         element:<Profile/>
       },
       {
-        path:"categories/:category_name/",
+        path:"/allCategory",
         element:<Categories/>
+      },
+      {
+        path:"categories/:category_name",
+        element:(isMobile && !isTablet)?  <MproductListing/> : <ProductListing/>
+      },
+      {
+        path:"popularItem",
+        element:(isMobile && !isTablet)?  <MproductListing/> : <ProductListing/>
       },
       {
         path:"product/:product_id",
@@ -37,7 +46,7 @@ export const routes = [
       },
       {
         path:"cart",
-        element:<Cart/>
+        element:<ProtectedRoute><Cart/></ProtectedRoute>
       },
       {
         path:"listing",
@@ -46,7 +55,15 @@ export const routes = [
       {
         path:"user/productcart",
         element : <ProtectedRoute><ProductCart/></ProtectedRoute>
-      }
+      },
+      {
+        path: "addProduct",
+        element: <ProtectedRoute><AddProduct/></ProtectedRoute>,
+      },
+      {
+        path: "success",
+        element: <Success/>,
+      },
     ],
   },
   {
@@ -60,9 +77,5 @@ export const routes = [
   {
     path:"/admin",
     element:   <Admin/>
-  },
-  {
-    path: "/addProduct",
-    element: <ProtectedRoute><AddProduct/></ProtectedRoute>,
-  },
+  }
 ];
